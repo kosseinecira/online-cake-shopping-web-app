@@ -11,6 +11,6 @@ public class FlavorDtoToFlavor implements Converter<FlavorDTO, Flavor> {
 
 	@Override
 	public Flavor convert(FlavorDTO source) {
-		return new Flavor(source.title(),source.description());
+		return new Flavor(source.title(), source.description());
 	}
 }

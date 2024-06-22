@@ -7,7 +7,7 @@ import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.flavor.Flavor;
 
 @Component
-public class FlavorToFlavorDtoConverter implements Converter<Flavor, FlavorDTO>{
+public class FlavorToFlavorDtoConverter implements Converter<Flavor, FlavorDTO> {
 
 	@Override
 	public FlavorDTO convert(Flavor source) {

@@ -18,6 +18,8 @@ import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.system.Result;
 import com.cakeshoppingapp.system.StatusCode;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class FlavorController {
 
@@ -42,7 +44,7 @@ public class FlavorController {
 	}
 
 	@PostMapping("/flavors")
-	public Result saveFlavor(@RequestBody FlavorDTO flavor) {
+	public Result saveFlavor(@Valid @RequestBody FlavorDTO flavor) {
 		// In case we want to use an Id generation Algorithm: example : SnowFlake
 		// algorithm
 		// We need to convent the DTO to Model object and switch it back in the result.
@@ -66,17 +68,16 @@ public class FlavorController {
 	}
 
 	@PutMapping("/flavors/{id}")
-	public Result update(@PathVariable("id") Long id, @RequestBody FlavorDTO flavorDto) {
+	public Result update(@PathVariable("id") Long id, @Valid @RequestBody FlavorDTO flavorDto) {
 		Flavor updatedFlavor = flavorService.update(id, flavorDtoToFlavor.convert(flavorDto));
 		FlavorDTO data = flavorToFlavorDtoConverter.convert(updatedFlavor);
 		return new Result(true, StatusCode.SUCCESS, "Flavor Updated Successfully!", data);
 	}
-	
+
 	@DeleteMapping("/flavors/{id}")
 	public Result delete(@PathVariable("id") Long id) {
 		flavorService.deleteById(id);
 		return new Result(true, StatusCode.SUCCESS, "Flavor Deleted Successfully!", null);
 	}
-	
 
 }

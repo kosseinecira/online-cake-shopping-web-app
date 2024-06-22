@@ -14,11 +14,11 @@ public class Result {
 	private int code;
 	private String message;
 	private Object data;
-	
+
 	public Result(boolean flag, int code, String message) {
 		this.flag = flag;
 		this.code = code;
 		this.message = message;
 	}
-	
+
 }

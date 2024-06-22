@@ -4,14 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.cakeshoppingapp.system.exceptions.SomethingAlreadyExistException;
 import com.cakeshoppingapp.system.exceptions.SomethingNotFoundException;
-
-import lombok.NoArgsConstructor;
 
 @Service
 public class FlavorService {
@@ -58,7 +54,8 @@ public class FlavorService {
 
 	public void deleteById(Long id) {
 		Optional<Flavor> flavorOptional = flavorRepository.findById(id);
-		if(!flavorOptional.isPresent()) throw new SomethingNotFoundException(id+"");
+		if (!flavorOptional.isPresent())
+			throw new SomethingNotFoundException(id + "");
 		flavorRepository.deleteById(id);
 	}
 

@@ -29,11 +29,12 @@ public class Flavor implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 4745584064715838359L;
-	
+
 	public Flavor(String title, String description) {
 		this.title = title;
 		this.description = description;
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -61,11 +62,5 @@ public class Flavor implements Serializable {
 		return Objects.equals(description, other.description) && Objects.equals(id, other.id)
 				&& Objects.equals(title, other.title);
 	}
-
-
-
-	
-
-
 
 }

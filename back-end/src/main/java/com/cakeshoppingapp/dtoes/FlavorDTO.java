@@ -1,5 +1,8 @@
 package com.cakeshoppingapp.dtoes;
 
-public record FlavorDTO(Long id, String title, String description) {
+import jakarta.validation.constraints.NotBlank;
+
+public record FlavorDTO(Long id, @NotBlank(message = "The Title Field Can Not Be Empty") String title,
+		String description) {
 
 }

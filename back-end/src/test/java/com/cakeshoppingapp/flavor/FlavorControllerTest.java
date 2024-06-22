@@ -1,11 +1,5 @@
 package com.cakeshoppingapp.flavor;
 
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -14,7 +8,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -302,14 +298,15 @@ public class FlavorControllerTest {
 				.andExpect(jsonPath("$.message").value("Flavor Deleted Successfully!"))
 				.andExpect(jsonPath("$.data").isEmpty());
 	}
+
 	@Test
 	void deleteFlavorByIdFailed() throws Exception {
 		Long randomId = 64513147L;
-		doThrow(new SomethingNotFoundException(randomId+"")).when(flavorService).deleteById(anyLong());
+		doThrow(new SomethingNotFoundException(randomId + "")).when(flavorService).deleteById(anyLong());
 		this.mockMvc.perform(delete("/flavors/{id}", randomId).accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-		.andExpect(jsonPath("$.message").value("Not Found! ::: "+randomId))
-		.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + randomId))
+				.andExpect(jsonPath("$.data").isEmpty());
 	}
 
 }

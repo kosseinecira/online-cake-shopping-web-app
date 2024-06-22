@@ -9,25 +9,23 @@ import com.cakeshoppingapp.system.Result;
 import com.cakeshoppingapp.system.StatusCode;
 
 @RestControllerAdvice
-public class GlobalHandlerAdvice extends RuntimeException{
+public class GlobalHandlerAdvice extends RuntimeException {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8027848182231030401L;
-	
-	
+
 	@ExceptionHandler(SomethingNotFoundException.class)
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	public Result handleSomethingNotFoundException(SomethingNotFoundException e) {
-		return new Result(false,StatusCode.NOT_FOUND,e.getMessage());
+		return new Result(false, StatusCode.NOT_FOUND, e.getMessage());
 	}
+
 	@ExceptionHandler(SomethingAlreadyExistException.class)
 	@ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
 	public Result handleSomethingNotFoundException(SomethingAlreadyExistException e) {
-		return new Result(false,StatusCode.ALREADY_EXIST,e.getMessage());
+		return new Result(false, StatusCode.ALREADY_EXIST, e.getMessage());
 	}
-	
 
 }

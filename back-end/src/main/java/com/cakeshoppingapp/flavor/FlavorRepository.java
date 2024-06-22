@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlavorRepository extends JpaRepository<Flavor, Long>{
+public interface FlavorRepository extends JpaRepository<Flavor, Long> {
 
 	@Query("SELECT f FROM Flavor f where f.title = :title")
 	public Optional<Flavor> findByTitle(String title);
-	
+
 }

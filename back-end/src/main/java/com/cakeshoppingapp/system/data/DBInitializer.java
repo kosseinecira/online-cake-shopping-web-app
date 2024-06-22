@@ -9,7 +9,7 @@ import com.cakeshoppingapp.flavor.FlavorService;
 
 @Component
 public class DBInitializer implements CommandLineRunner {
-	
+
 	@Autowired
 	private FlavorService flavorService;
 
@@ -25,15 +25,15 @@ public class DBInitializer implements CommandLineRunner {
 						+ " enhanced by layers of smooth chocolate ganache or creamy frosting,"
 						+ " making it a decadent favorite for chocolate lovers.");
 		Flavor vanillaFlavor = new Flavor(2L, "Vanilla",
-			    "Vanilla cake offers a classic, timeless flavor characterized by its delicate sweetness and rich,"
-			    + " creamy notes of pure vanilla. Its light and fluffy texture makes"
-			    + " it a versatile dessert that pairs well with various frostings and"
-			    + " fillings, providing a comforting and nostalgic treat.");
-		
+				"Vanilla cake offers a classic, timeless flavor characterized by its delicate sweetness and rich,"
+						+ " creamy notes of pure vanilla. Its light and fluffy texture makes"
+						+ " it a versatile dessert that pairs well with various frostings and"
+						+ " fillings, providing a comforting and nostalgic treat.");
+
 		Flavor caramelFlavor = new Flavor(3L, "Caramel", "Caramel cake features a luxurious, buttery sweetness "
 				+ "with warm, toasty notes of caramelized " + "sugar. Its flavor is reminiscent of rich toffee, with a"
 				+ " smooth and slightly smoky depth that " + "creates a sumptuous and comforting dessert experience.");
-		
+
 		flavorService.save(chocolateFlavor);
 		flavorService.save(vanillaFlavor);
 		flavorService.save(caramelFlavor);
