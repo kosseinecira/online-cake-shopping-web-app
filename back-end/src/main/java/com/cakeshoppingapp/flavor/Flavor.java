@@ -1,7 +1,6 @@
 package com.cakeshoppingapp.flavor;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import org.hibernate.annotations.ColumnTransformer;
 
@@ -30,37 +29,23 @@ public class Flavor implements Serializable {
 	 */
 	private static final long serialVersionUID = 4745584064715838359L;
 
-	public Flavor(String title, String description) {
-		this.title = title;
-		this.description = description;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(unique = true)
 	@ColumnTransformer(write = "trim(?)")
-	private String title;
+	private String name;
 
 	@Column(length = 2000)
 	private String description;
+//	
+//	@JsonIgnore
+//	@OneToMany(cascade = CascadeType.REMOVE)
+//	private List<Cake> cakes = new ArrayList<>();
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(description, id, title);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Flavor other = (Flavor) obj;
-		return Objects.equals(description, other.description) && Objects.equals(id, other.id)
-				&& Objects.equals(title, other.title);
+	public Flavor(String name, String description) {
+		this.name = name;
+		this.description = description;
 	}
 
 }
