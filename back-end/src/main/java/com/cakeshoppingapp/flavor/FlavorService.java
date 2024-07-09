@@ -17,28 +17,18 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class FlavorService {
 
-	private FlavorRepository flavorRepository;
+	private final FlavorRepository flavorRepository;
 
-	private FlavorToFlavorDtoConverter flavorToFlavorDtoConverter;
+	private final FlavorToFlavorDtoConverter flavorToFlavorDtoConverter;
 
-	private FlavorDtoToFlavorConverter flavorDtoToFlavorConverter;
+	private final FlavorDtoToFlavorConverter flavorDtoToFlavorConverter;
 
 	public FlavorService(FlavorRepository flavorRepository, FlavorToFlavorDtoConverter flavorToFlavorDtoConverter,
 			FlavorDtoToFlavorConverter flavorDtoToFlavorConverter) {
-		super();
 		this.flavorRepository = flavorRepository;
 		this.flavorToFlavorDtoConverter = flavorToFlavorDtoConverter;
 		this.flavorDtoToFlavorConverter = flavorDtoToFlavorConverter;
 	}
-
-//	@Autowired
-//	private FlavorRepository flavorRepository;
-//	
-//	@Autowired
-//	private FlavorToFlavorDtoConverter flavorToFlavorDtoConverter;
-//	
-//	@Autowired
-//	private FlavorDtoToFlavorConverter flavorDtoToFlavorConverter;
 
 	// done!
 	public FlavorDTO save(FlavorDTO flavorDto) {
@@ -83,11 +73,6 @@ public class FlavorService {
 			updated.setDescription(flavorDtoUpdates.description());
 			return flavorToFlavorDtoConverter.convert(flavorRepository.save(updated));
 		}).orElseThrow(() -> new SomethingNotFoundException("Flavor With Id: " + id));
-//		Flavor oldFlavor = flavorRepository.findById(id).get();
-//		oldFlavor.setTitle(flavorUpdates.getTitle());
-//		oldFlavor.setDescription(flavorUpdates.getDescription());
-//		Flavor updatedFlavor = flavorRepository.save(oldFlavor);
-//		return updatedFlavor;
 	}
 
 	public void deleteById(Long id) {

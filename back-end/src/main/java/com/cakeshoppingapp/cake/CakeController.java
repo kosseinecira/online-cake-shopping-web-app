@@ -1,6 +1,5 @@
 package com.cakeshoppingapp.cake;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cakeshoppingapp.converters.cake.CakeDtoToCakeConverter;
-import com.cakeshoppingapp.converters.cake.CakeToCakeDtoConverter;
 import com.cakeshoppingapp.dtoes.CakeDTO;
 import com.cakeshoppingapp.dtoes.CakeMultipleFileDTO;
 import com.cakeshoppingapp.system.Result;
@@ -22,14 +19,12 @@ import jakarta.validation.Valid;
 
 @RestController
 public class CakeController {
-	@Autowired
-	CakeService cakeService;
 
-	@Autowired
-	CakeDtoToCakeConverter cakeDtoToCakeConverter;
+	private final CakeService cakeService;
 
-	@Autowired
-	CakeToCakeDtoConverter cakeToCakeDtoConverter;
+	public CakeController(CakeService cakeService) {
+		this.cakeService = cakeService;
+	}
 
 	@PostMapping(value = "/flavors/{flavorId}/cakes", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public Result save(@Valid CakeMultipleFileDTO cakeMultipleFileDTO, @PathVariable("flavorId") Long flavorId) {

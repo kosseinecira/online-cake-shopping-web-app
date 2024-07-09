@@ -1,6 +1,5 @@
 package com.cakeshoppingapp.flavor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +20,17 @@ public class FlavorController {
 
 	/*
 	 * A good practice is letting the controller catching exception and wrap it into
-	 * the result object so the client know what's wrong Update : I think we should
+	 * the result object so the client know what's wrong. Update : I think we should
 	 * use a different way to catch exception : A better way is making the
 	 * Controller cleaner and more readable, by making it exceptions agnostic. and
 	 * letting the service layer decide what to do.
 	 */
 
-	@Autowired
-	FlavorService flavorService;
+	private final FlavorService flavorService;
+
+	public FlavorController(FlavorService flavorService) {
+		this.flavorService = flavorService;
+	}
 
 	@GetMapping(value = { "/flavors", "/flavors/" })
 	public Result findAllFlavors() {

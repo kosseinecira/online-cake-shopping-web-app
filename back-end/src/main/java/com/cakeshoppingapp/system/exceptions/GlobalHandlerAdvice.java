@@ -28,4 +28,10 @@ public class GlobalHandlerAdvice extends RuntimeException {
 		return new Result(false, StatusCode.ALREADY_EXIST, e.getMessage());
 	}
 
+	@ExceptionHandler(NotSupportedException.class)
+	@ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
+	public Result handleNotSupportedException(NotSupportedException e) {
+		return new Result(false, StatusCode.BAD_REQUEST, e.getMessage());
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.cakeshoppingapp.image;
+package com.cakeshoppingapp.customer;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,23 +9,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@NoArgsConstructor
 @Getter
+@Setter
+@ToString
 @Entity
-@Table(name = "images")
-public class CakeImage {
+@Table(name = "addresses")
+public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String imagePath;
-
-	public CakeImage(String name, String imagePath) {
-		this.name = name;
-		this.imagePath = imagePath;
-	}
-
+	private String country;
+	private String provinance;
+	private String city;
+	private Integer zipCode;
 }

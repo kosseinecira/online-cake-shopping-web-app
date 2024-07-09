@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import com.cakeshoppingapp.cake.Cake;
 import com.cakeshoppingapp.cake.CakeRepository;
+import com.cakeshoppingapp.customer.Address;
+import com.cakeshoppingapp.customer.Customer;
+import com.cakeshoppingapp.customer.CustomerRepository;
 import com.cakeshoppingapp.flavor.Flavor;
 import com.cakeshoppingapp.flavor.FlavorRepository;
 
@@ -14,19 +17,23 @@ public class DBInitializer implements CommandLineRunner {
 	private final FlavorRepository flavorRepository;
 
 	private final CakeRepository cakeRepository;
+	private final CustomerRepository customerRepository;
 
-	public DBInitializer(FlavorRepository flavorRepository, CakeRepository cakeRepository) {
+	public DBInitializer(FlavorRepository flavorRepository, CakeRepository cakeRepository,
+			CustomerRepository customerRepository) {
 		this.flavorRepository = flavorRepository;
 		this.cakeRepository = cakeRepository;
+		this.customerRepository = customerRepository;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		setUpDB();
+		setUpCakes();
+		setUpCustomers();
 
 	}
 
-	void setUpDB() {
+	void setUpCakes() {
 
 		Flavor chocolateFlavor = new Flavor(1L, "Chocolate",
 				"Chocolate cake boasts a deep," + " indulgent flavor with rich cocoa undertones and a moist,"
@@ -77,14 +84,32 @@ public class DBInitializer implements CommandLineRunner {
 		cakeRepository.save(cake4);
 		cakeRepository.save(cake5);
 
-//		flavorService.save(chocolateFlavor);
-//		flavorService.save(vanillaFlavor);
-//		flavorService.save(caramelFlavor);
-//		
-//		cakeService.save(chocolateFlavor.id(), cake1);
-//		cakeService.save(vanillaFlavor.id(), cake2);
-//		cakeService.save(caramelFlavor.id(), cake3);
-//		cakeService.save(caramelFlavor.id(), cake4);
-//		cakeService.save(chocolateFlavor.id(), cake5);
 	}
+
+	public void setUpCustomers() {
+
+		Address address1 = new Address(1L, "Algeria", "Algiers", "Algiers", 16000);
+		Address address2 = new Address(2L, "Algeria", "Ouargla", "Ouargla", 30000);
+		Address address3 = new Address(3L, "Algeria", "Constantine", "Constantine", 25000);
+
+		Customer customer1 = new Customer(1L, "username1", "password1", "First Name1", "Last Name1", "email1@gmail.com",
+				"00123456789", "USER", "profile image path here", true, true, false, true, address1);
+
+		Customer customer2 = new Customer(2L, "username2", "password2", "First Name2", "Last Name2", "email2@gmail.com",
+				"00987654321", "USER", "profile image path here", false, true, false, true, address2);
+
+		Customer customer3 = new Customer(3L, "username3", "password3", "First Name3", "Last Name3", "email3@gmail.com",
+				"00159874632", "USER", "profile image path here", true, true, false, true, address3);
+		Customer customer4 = new Customer(4L, "username4", "password4", "First Name4", "Last Name4", "email4@gmail.com",
+				"00123654789", "USER", "profile image path here", true, false, false, true, address3);
+		Customer customer5 = new Customer(5L, "username5", "password5", "First Name5", "Last Name5", "email5@gmail.com",
+				"00987456321", "USER", "profile image path here", false, false, false, true, address2);
+		customerRepository.save(customer1);
+		customerRepository.save(customer2);
+		customerRepository.save(customer3);
+		customerRepository.save(customer4);
+		customerRepository.save(customer5);
+
+	}
+
 }

@@ -1,10 +1,9 @@
 package com.cakeshoppingapp.cake;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,23 +20,19 @@ import com.cakeshoppingapp.system.exceptions.SomethingAlreadyExistException;
 import com.cakeshoppingapp.system.exceptions.SomethingNotFoundException;
 import com.cakeshoppingapp.utils.FileUploadUtil;
 
-import jakarta.servlet.ServletContext;
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class CakeService {
 
-	private CakeRepository cakeRepository;
+	private final CakeRepository cakeRepository;
 
-	private FlavorService flavorService;
+	private final FlavorService flavorService;
 
-	private CakeToCakeDtoConverter cakeToCakeDtoConverter;
+	private final CakeToCakeDtoConverter cakeToCakeDtoConverter;
 
-	private CakeDtoToCakeConverter cakeDtoToCakeConverter;
-
-	@Autowired
-	private ServletContext servletContext;
+	private final CakeDtoToCakeConverter cakeDtoToCakeConverter;
 
 	public CakeService(CakeRepository cakeRepository, FlavorService flavorService,
 			CakeToCakeDtoConverter cakeToCakeDtoConverter, CakeDtoToCakeConverter cakeDtoToCakeConverter) {
@@ -129,20 +124,14 @@ public class CakeService {
 	}
 
 	private List<CakeImage> handleImageSaving(Long flavorId, String cakeName, List<MultipartFile> imageList) {
-		String rootPath = servletContext.getRealPath("\\");
-		System.out.println(rootPath);
-		String imagesPath = "resources\\static\\images\\flavors_images\\";
+		String imagesPath = "resources\\static\\images\\flavors_images";
 		return imageList.stream().map(image -> {
-			String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-			String imagePath = rootPath + imagesPath + flavorId + "\\cakes_images\\" + cakeName + "_images" + fileName;
-			String imageExtension = "";
-			try {
-				FileUploadUtil.saveFile(imagePath, fileName, image);
-				imageExtension = StringUtils.getFilenameExtension(imagePath);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return new CakeImage(fileName, imagePath, imageExtension);
+			String fileName = UUID.randomUUID().toString() + "_"
+					+ StringUtils.cleanPath(image.getOriginalFilename().strip());
+			String imagePath = imagesPath + flavorId + "\\cakes_images\\" + cakeName.replace(" ", "") + "_images";
+			String[] result = FileUploadUtil.saveImageToPath(image, imagesPath);
+			// result[0] = file name, result[1] = cake image path
+			return new CakeImage(result[0], result[1]);
 		}).toList();
 	}
 
