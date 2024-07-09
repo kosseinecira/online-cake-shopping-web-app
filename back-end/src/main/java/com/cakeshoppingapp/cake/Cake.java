@@ -31,10 +31,10 @@ import lombok.ToString;
 @ToString
 @Table(name = "cakes")
 public class Cake implements Serializable {
-
-	/**
+	/*
 	 * 
-	 */
+	 * */
+
 	private static final long serialVersionUID = 6235547172671695196L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
