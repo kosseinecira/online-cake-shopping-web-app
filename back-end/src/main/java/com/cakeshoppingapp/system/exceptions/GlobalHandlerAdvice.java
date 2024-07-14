@@ -1,6 +1,8 @@
 package com.cakeshoppingapp.system.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +34,12 @@ public class GlobalHandlerAdvice extends RuntimeException {
 	@ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
 	public Result handleNotSupportedException(NotSupportedException e) {
 		return new Result(false, StatusCode.BAD_REQUEST, e.getMessage());
+	}
+
+	@ExceptionHandler({ UsernameNotFoundException.class, BadCredentialsException.class })
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	public Result handleUsernameOrPasswordNotFoundException(Exception e) {
+		return new Result(false, StatusCode.UNAUTHORIZED, "Invalid Username or Password",e.getMessage());
 	}
 
 }

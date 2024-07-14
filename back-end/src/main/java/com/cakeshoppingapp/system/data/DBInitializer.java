@@ -1,6 +1,7 @@
 package com.cakeshoppingapp.system.data;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.cakeshoppingapp.cake.Cake;
@@ -18,19 +19,22 @@ public class DBInitializer implements CommandLineRunner {
 
 	private final CakeRepository cakeRepository;
 	private final CustomerRepository customerRepository;
+	private final PasswordEncoder passwordEncoder;
+
+
 
 	public DBInitializer(FlavorRepository flavorRepository, CakeRepository cakeRepository,
-			CustomerRepository customerRepository) {
+			CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
 		this.flavorRepository = flavorRepository;
 		this.cakeRepository = cakeRepository;
 		this.customerRepository = customerRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		setUpCakes();
 		setUpCustomers();
-
 	}
 
 	void setUpCakes() {
@@ -93,7 +97,7 @@ public class DBInitializer implements CommandLineRunner {
 		Address address3 = new Address(3L, "Algeria", "Constantine", "Constantine", 25000);
 
 		Customer customer1 = new Customer(1L, "username1", "password1", "First Name1", "Last Name1", "email1@gmail.com",
-				"00123456789", "USER", "profile image path here", true, true, false, true, address1);
+				"00123456789", "ADMIN USER", "profile image path here", true, true, false, true, address1);
 
 		Customer customer2 = new Customer(2L, "username2", "password2", "First Name2", "Last Name2", "email2@gmail.com",
 				"00987654321", "USER", "profile image path here", false, true, false, true, address2);
@@ -104,6 +108,12 @@ public class DBInitializer implements CommandLineRunner {
 				"00123654789", "USER", "profile image path here", true, false, false, true, address3);
 		Customer customer5 = new Customer(5L, "username5", "password5", "First Name5", "Last Name5", "email5@gmail.com",
 				"00987456321", "USER", "profile image path here", false, false, false, true, address2);
+
+		customer1.setPassword(passwordEncoder.encode("password1"));
+		customer2.setPassword(passwordEncoder.encode("password2"));
+		customer3.setPassword(passwordEncoder.encode("password3"));
+		customer4.setPassword(passwordEncoder.encode("password4"));
+		customer5.setPassword(passwordEncoder.encode("password5"));
 		customerRepository.save(customer1);
 		customerRepository.save(customer2);
 		customerRepository.save(customer3);
