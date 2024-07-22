@@ -13,14 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -96,6 +94,26 @@ public class Customer {
 		Customer other = (Customer) obj;
 		return Objects.equals(email, other.email) && Objects.equals(id, other.id)
 				&& Objects.equals(username, other.username);
+	}
+
+	public Customer(Long id, String username, String password, String firstName, String lastName, String email,
+			String phone, String role, String imagePath, boolean emailVerified, boolean phoneVerified, boolean blocked,
+			boolean allInformationProvided, Address address) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phone = phone;
+		this.role = role;
+		this.imagePath = imagePath;
+		this.emailVerified = emailVerified;
+		this.phoneVerified = phoneVerified;
+		this.blocked = blocked;
+		this.allInformationProvided = allInformationProvided;
+		this.address = address;
 	}
 
 }
