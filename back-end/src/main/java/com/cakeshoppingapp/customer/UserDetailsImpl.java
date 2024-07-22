@@ -10,8 +10,6 @@ import org.springframework.util.StringUtils;
 
 import com.cakeshoppingapp.dtoes.AuthenticationDTO;
 
-
-
 public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = -8801422038429081822L;
@@ -23,7 +21,6 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		System.out.println("public Collection<? extends GrantedAuthority> getAuthorities()");
 		return Arrays.stream(StringUtils.tokenizeToStringArray(authenticationDTO.role(), " "))
 				.map(str -> new SimpleGrantedAuthority("ROLE_" + str)).toList();
 	}
@@ -66,6 +63,8 @@ public class UserDetailsImpl implements UserDetails {
 		return true;
 	}
 
-	
+	public AuthenticationDTO getAuthenticationDTO() {
+		return authenticationDTO;
+	}
 
 }

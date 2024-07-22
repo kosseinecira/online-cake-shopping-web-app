@@ -39,7 +39,7 @@ public class GlobalHandlerAdvice extends RuntimeException {
 	@ExceptionHandler({ UsernameNotFoundException.class, BadCredentialsException.class })
 	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
 	public Result handleUsernameOrPasswordNotFoundException(Exception e) {
-		return new Result(false, StatusCode.UNAUTHORIZED, "Invalid Username or Password",e.getMessage());
+		return new Result(false, StatusCode.UNAUTHORIZED, "Invalid Username or Password", e.getMessage());
 	}
 
 }

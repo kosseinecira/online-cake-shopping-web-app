@@ -21,8 +21,6 @@ public class DBInitializer implements CommandLineRunner {
 	private final CustomerRepository customerRepository;
 	private final PasswordEncoder passwordEncoder;
 
-
-
 	public DBInitializer(FlavorRepository flavorRepository, CakeRepository cakeRepository,
 			CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
 		this.flavorRepository = flavorRepository;

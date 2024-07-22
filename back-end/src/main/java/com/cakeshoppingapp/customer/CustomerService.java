@@ -1,15 +1,12 @@
 package com.cakeshoppingapp.customer;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cakeshoppingapp.converters.customer.AuthenticationDtoToCustomerConverter;
@@ -138,12 +135,7 @@ public class CustomerService implements UserDetailsService {
 
 		AuthenticationDTO authenticationDTO = new AuthenticationDTO(customer.getId(), customer.getUsername(),
 				customer.getEmail(), customer.getPassword(), customer.isBlocked(), customer.getRole());
-		
-		System.out.println("user details called and the dto was: " + authenticationDTO.toString());
-		
-		Arrays.stream(StringUtils.tokenizeToStringArray(authenticationDTO.role(), " "))
-		.map(str -> new SimpleGrantedAuthority("ROLE_" + str)).toList().forEach(System.out::println);;
-		
+
 		return new UserDetailsImpl(authenticationDTO);
 	}
 
