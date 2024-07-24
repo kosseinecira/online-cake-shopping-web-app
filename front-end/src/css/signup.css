@@ -1,0 +1,163 @@
+
+/*signup-section-styling starts*/
+.signup-section {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    padding: 0;
+    box-shadow: 0 14px 28px rgba(232, 67, 147, 0.25), 0 10px 10px rgba(232, 67, 147, 0.22);
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: white;
+}
+
+/*form styling starts*/
+.form-title {
+    width: 100%;
+    font-size: 1.5rem;
+    align-self: center;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    font-weight: bolder;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background-color: lightgray;
+    justify-content: center;
+    align-items: flex-start;
+    width: 50%;
+    margin: auto;
+    row-gap: 20px;
+    background-color: white;
+    padding: 50px;
+
+}
+
+.form label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+
+/*signup using social media part styling starts*/
+.social-media-signup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 25px;
+    width: 100%;
+}
+
+.signup-section .signup-button {
+    align-self: end;
+    width: 35%;
+    text-transform: uppercase;
+
+}
+
+.social-media-login .main-button {
+    width: 75%;
+}
+
+/*signup using social media part styling ends*/
+
+.signup-form-left-part {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px;
+    background-image: url(/public/imgs/login-singup-form-bg.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    z-index: 0;
+}
+
+.signup-form-left-part::before {
+    opacity: 0.5;
+    background: rgb(253, 121, 168);
+    background: linear-gradient(45deg, rgba(253, 121, 168, 1) 0%, rgba(232, 67, 147, 1) 100%);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.signup-form-left-part-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: white;
+    z-index: 1;
+}
+
+.signup-form-left-part-welcome-heading {
+    width: 100%;
+    font-weight: bolder;
+    font-size: 5rem;
+    text-transform: uppercase;
+}
+
+.signup-form-left-part-welcome-details {
+    width: 100%;
+    font-size: 1em;
+}
+
+/* X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+}
+
+@media (max-width: 767.98px) {
+    .signup-section{
+        width: 100%;
+    }
+    .form{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+     .signup-section .form .signup-button{
+        align-self: center;
+    }
+    .social-media-signup{
+        flex-direction: column;
+    }
+}
+
+/* Small devices (landscape phones, less than 768px)*/
+@media (max-width:991.97px) {
+    .signup-form-left-part {
+        display: none;
+    }
+    .form{
+        width: 100%;
+    }
+}
+
+/* Medium devices (tablets, less than 992px)*/
+@media (min-width: 991.98px) {
+    .signup-form-left-part-welcome-heading {
+        font-size: 4rem;
+    }
+}
+
+/* Large devices (desktops, less than 1200px)*/
+@media (min-width: 1199.98px) {
+    .signup-form-left-part-welcome-heading {
+        font-size: 5rem;
+    }
+}
+
+/* X-Large devices (large desktops, less than 1400px)*/
+@media (min-width: 1399.98px) {}
+
+/* XX-Large devices (larger desktops)*/
+/* No media query since the xxl breakpoint has no upper bound on its width*/

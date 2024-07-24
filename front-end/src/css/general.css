@@ -1,0 +1,253 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css);
+@import url(https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@200..1000&family=Madimi+One&family=Rubik:ital,wght@0,300..900;1,300..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap);
+/*top-nav styling starts*/
+:root {
+    --primary-color: #e84393;
+    --secondary-color: #fd79a8;
+    --white: #ffffff;
+    --main-font: "";
+    --text-description: #6c6c6c
+}
+
+* {
+    font-family: "Cairo", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    caret-color: var(--primary-color);
+    user-select: var(--primary-color);
+    box-sizing: border-box;
+}
+
+::selection {
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+body {
+    background-color: black;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.container {
+    margin: auto;
+    width: 90%;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+/*
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+*/
+
+
+/* X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+    .container {
+        width: 100%;
+    }
+}
+
+/* Small devices (landscape phones, less than 768px)*/
+@media (max-width: 767.98px) {}
+
+/* Medium devices (tablets, less than 992px)*/
+@media (max-width: 991.98px) {}
+
+/* Large devices (desktops, less than 1200px)*/
+@media (max-width: 1199.98px) {}
+
+/* X-Large devices (large desktops, less than 1400px)*/
+@media (max-width: 1399.98px) {}
+
+/* XX-Large devices (larger desktops)*/
+/* No media query since the xxl breakpoint has no upper bound on its width*/
+
+/* links styling*/
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+/*
+visible - hidden
+*/
+
+.visible{
+    display: block;
+}
+.hidden{
+    display: none;
+}
+
+
+
+/*button-proffessional style*/
+
+/*
+.main-button {
+    width: fit-content;
+    color: var(--white);
+    background-color: transparent;
+    border-color: var(--primary-color);
+    border-width: thin;
+    border-style: solid;
+    border-radius: 0;
+    font-size: 1em;
+    padding: 1em;
+    font-weight: bold;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.main-button:hover {
+    box-shadow: -12px -8px 40px rgba(232, 67, 147, 0.15) inset,
+        0px 16px 48px 0px rgba(232, 67, 147, 0.2);
+
+}*/
+.filter-form{
+    display: flex;
+    flex-direction: column;
+}
+/*general button style*/
+.main-button,
+.order-button,
+.secondary-button{
+    width: fit-content;
+    color: var(--primary-color);
+    background-color: transparent;
+    border-color: var(--primary-color);
+    border-width: 0.5px;
+    border-style: solid;
+    border-radius: 0;
+    font-size: 1em;
+    padding: 1em;
+    font-weight: bold;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.main-button:hover {
+    color: white;
+    background-color: var(--primary-color);
+}
+.main-button:hover a{
+    color: white;
+    transition: 0.5s;
+    cursor: pointer
+}
+
+.secondary-button{
+    color: white;
+    border-color: white;
+    margin: 0;
+}
+.secondary-button:hover{
+    color: var(--primary-color);
+    background-color: white;
+}
+.order-button{
+    color: white;
+    background-color: var(--primary-color);
+    margin: 0;
+}
+.order-button:hover{
+    opacity: 0.8;
+}
+/**/
+
+.main-input {
+    border: 1px solid #eee;
+    padding: 1em;
+    width: 100%;
+}
+
+.main-input:focus {
+    background-color: white;
+    color: var(--secondary-color);
+    outline: none;
+    border: 1px solid var(--primary-color)
+}
+
+.main-input::placeholder {
+    color: rgb(182, 182, 182);
+}
+
+.profile-button {
+    padding-right: 0.8em;
+    padding-left: 0.8em;
+}
+
+/*social media authentication buttons styling starts*/
+
+.social-media-login .google-login-button {
+    background-color: #ea4335;
+}
+
+.social-media-login .facebook-login-button {
+    background-color: #1877f2;
+}
+
+.social-media-login .twitter-login-button {
+    background-color: #1da1f2;
+}
+
+.social-media-login .google-login-button,
+.social-media-login .facebook-login-button,
+.social-media-login .twitter-login-button {
+    color: white;
+    border: none
+}
+
+.social-media-login .google-login-button:hover {
+    background-color: white;
+    box-shadow: 0px 5px 0px #ea4335;
+    color: #ea4335;
+}
+
+.social-media-login .facebook-login-button:hover {
+    background-color: white;
+    box-shadow: 0px 5px 0px #1877f2;
+    color: #1877f2;
+}
+
+.social-media-login .twitter-login-button:hover {
+    background-color: white;
+    box-shadow: 0px 5px 0px #1da1f2;
+    color: #1da1f2;
+}
+
+/*social media authentication buttons styling ends*/
+
+.filter-form input[type=checkbox] { 
+    vertical-align: middle; 
+    position: relative; 
+    bottom: 0.5px; 
+    margin-right: 10px;
+    margin-left: 10px;
+} 
+.filter-form label{
+    margin: 0.5em 0.5em 0 0;
+    display: block;
+}
+
+.flex {
+    display: flex;
+}
+.col-flex {
+    display: flex;
+    flex-direction: column;
+}
+

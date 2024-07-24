@@ -1,0 +1,241 @@
+header {}
+
+/*logo-container styling starts*/
+header .logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+header .logo-container>img {
+    height: 400px;
+    margin: auto;
+    object-fit: contain;
+}
+/*logo-container styling ends*/
+
+
+/*toggle-menu icon styling ends*/
+header .main-nav-container .sections-section .toggle-menu {
+    color: var(--primary-color);
+    font-size: 1rem;
+    z-index: 5;
+    position: absolute;
+    cursor: pointer;
+}
+
+@media (min-width: 991.98px) {
+    /*toggle-menu display icon*/
+    header .main-nav-container .sections-section .toggle-menu {
+        display: none;
+    }
+}
+
+/*toggle-menu icon styling ends*/
+
+/*main-nav container styling starts*/
+header .main-nav-container {
+    display: flex;
+    min-height: 70px;
+    font-size: 0.8rem;
+    height: inherit;
+    align-items: center;
+    border-bottom: 1px solid var(--primary-color);
+
+}
+
+/*sections-section styling start*/
+header .main-nav-container .sections-section {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+}
+
+/*main-ul-contaienr styling starts*/
+header .main-nav-container .sections-section .main-ul-container {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+/*applyed on screen less than 992px */
+@media (max-width: 991.98px) {
+
+    /*toggle-menu icon*/
+    header .main-nav-container {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    header .main-nav-container .authentication-section {
+        display: none;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    header .main-nav-container .sections-section .main-ul-container {
+        display: none;
+        flex-direction: column;
+        top: 0;
+        flex: 1 100%;
+    }
+}
+
+header .main-nav-container .sections-section .main-ul-container li {
+    width: fit-content;
+    font-weight: bold;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-right: 1em;
+    transition: box-shadow 0.3s;
+}
+
+
+header .main-nav-container .sections-section .main-ul-container li:hover:not(.sub-ul-container .sub-ul li) {
+    box-shadow: 0px 5px 0px var(--secondary-color);
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: 0.15s;
+}
+
+header .main-nav-container .sections-section .main-ul-container li a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+header .main-nav-container .sections-section .main-ul-container li a:hover:not(.sub-ul-container .sub-ul li a) {
+    color: var(--secondary-color);
+}
+
+/*main-ul-contaienr styling starts*/
+
+/*sections-section end*/
+
+/*sub-section start*/
+
+.sub-ul-container {
+    position: relative;
+}
+
+/*drawing the arrow*/
+.sub-ul-container::before {
+    content: "";
+    position: absolute;
+    border-width: 0.5em;
+    border-color: rgb(255, 255, 255) transparent transparent transparent;
+    border-style: solid;
+    bottom: -0.2em;
+    left: 0.1em;
+    display: none;
+}
+
+.sub-ul-container:hover::before {
+    display: block;
+    border-color: var(--primary-color) transparent transparent transparent;
+}
+
+/*display none until hovering*/
+
+.sub-ul-container:hover .sub-ul {
+    display: block;
+}
+
+.sub-ul-container .sub-ul {}
+
+.sub-ul {
+    display: none;
+    width: 200px;
+    margin-top: 1em;
+    list-style-type: none;
+    position: absolute;
+    z-index: 6;
+    background-color: black
+}
+
+.sub-ul li {
+    box-sizing: border-box;
+    width: inherit;
+    padding-left: 1em;
+    transition: box-shadow 0.15s, 0.15s;
+}
+
+.sub-ul li:hover {
+    box-shadow: 0px 5px 0px var(--primary-color);
+}
+
+.sub-ul li a {
+    color: var(--white);
+}
+
+.sub-ul li a:hover {
+    color: var(--primary-color);
+}
+
+/*sub-section end*/
+
+
+/*authentication section styling starts*/
+
+.authentication-section {
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.basket-shopping-button {
+    position: relative;
+}
+
+.bell-button {
+    position: relative;
+}
+
+.bell-button i span,
+.basket-shopping-button i span {
+    position: absolute; 
+    top: 5px;
+    right: 5px;
+    color: var(--primary-color);
+    font-size: 0.7rem;
+}
+
+.bell-button:hover, 
+.basket-shopping-button:hover i span{
+    color: white;
+}
+
+
+/*authentication section styling ends*/
+
+
+/*main-nav container ends*/
+
+/* X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {}
+
+/* Small devices (landscape phones, less than 768px)*/
+@media (max-width: 767.98px) {}
+
+/* Medium devices (tablets, less than 992px)*/
+@media (max-width: 991.98px) {}
+
+/* Large devices (desktops, less than 1200px)*/
+@media (max-width: 1199.98px) {}
+
+/* X-Large devices (large desktops, less than 1400px)*/
+@media (max-width: 1399.98px) {}
+
+/* XX-Large devices (larger desktops)*/
+/* No media query since the xxl breakpoint has no upper bound on its width*/
+
+/*top-nav styling ends*/

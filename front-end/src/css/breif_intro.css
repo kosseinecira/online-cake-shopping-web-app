@@ -1,0 +1,124 @@
+.brief-intro-section {
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.brief-intro {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: var(--primary-color);
+    box-sizing: border-box;
+    margin-bottom: 50px;
+}
+
+
+.brief-intro-heading {
+    position: relative;
+    color: white;
+    font-size: 3rem;
+    text-transform: uppercase;
+    margin: 0;
+    text-align: center;
+}
+
+/*drawing the arrow*/
+.brief-intro-heading::before {
+    content: "";
+    position: absolute;
+    border-width: 0.3em;
+    border-color: white transparent transparent white;
+    border-style: solid;
+    top: 0;
+    left: -0.6em;
+}
+
+.brief-intro-heading::after {
+    content: "";
+    position: absolute;
+    border-width: 0.3em;
+    border-color: transparent white white transparent;
+    border-style: solid;
+    bottom: 0;
+    right: -0.6em;
+}
+
+.brief-intro-who-are-we {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    color: var(--white);
+}
+
+.brief-intro-details {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin: auto;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+@media (max-width: 767.98px) {
+    .brief-intro-details {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+.brief-intro-card {
+    height: 350px;
+    overflow: hidden;
+}
+
+.brief-intro-card-img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.brief-intro-information {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: justify;
+    color: white;
+    flex: 1;
+}
+
+.brief-intro-description {
+    font-size: 1rem;
+    width: 100%;
+}
+
+.brief-intro-description-footer {
+    display: flex;
+    width: 100%;
+    height: 100px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.read-more-about-our-acheivements {
+    width: 100%;
+}
+
+.read-more-about-us-button {
+    color: white;
+    border-color: white;
+    margin-right: auto;
+
+}
+
+.read-more-about-us-button:hover {
+    color: var(--primary-color);
+    background-color: white;
+}

@@ -1,0 +1,131 @@
+footer {
+    background-color: var(--primary-color);
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+footer h3 {
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+footer ul {
+    list-style-type: none;
+}
+
+footer ul li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+footer a {
+    text-decoration: none;
+    color: white;
+}
+
+footer h3 {
+    color: white;
+    font-size: 1.3em;
+}
+
+footer p {
+    color: white;
+
+}
+
+footer hr {
+    width: 80%;
+    margin: auto;
+    color: white
+}
+
+.f-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    gap: 20px;
+}
+.f-brand {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-brand img {
+    width: 250px;
+    object-fit: scale-down;
+}
+
+.f-col {
+    flex: 1;
+}
+
+.copyright {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.news-letter-col{
+    display: flex;
+    flex-flow: wrap;
+    align-content: flex-start;
+    row-gap: 20px;
+}
+footer .news-letter {
+    border: none;
+    flex: 100%;
+}
+footer .row1 .news-letter-col .new-letter-subscribe-button{
+    color: white;
+    border-color: white;
+    margin: 0;
+}
+footer .row1 .news-letter-col .new-letter-subscribe-button:hover{
+    color: var(--primary-color);
+    background-color: white;
+}
+
+/* Small devices (landscape phones, less than 768px)*/
+@media (max-width: 767.98px) {
+
+}
+
+/* Medium devices (tablets, less than 992px)*/
+@media (max-width: 991.98px) {
+
+    .f-brand{
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 50px;
+    }
+    .f-brand ul{
+        text-align: center;
+    }
+    footer ul {
+        list-style-type: none;
+
+    }
+    .f-col {
+        width: 300px;
+    }
+}
+
+/* Large devices (desktops, less than 1200px)*/
+@media (max-width: 1199.98px) {}
+
+/* X-Large devices (large desktops, less than 1400px)*/
+@media (max-width: 1399.98px) {}
