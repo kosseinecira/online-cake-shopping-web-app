@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.cakeshoppingapp.cake.Cake;
 import com.cakeshoppingapp.cake.CakeRepository;
+import com.cakeshoppingapp.category.Category;
+import com.cakeshoppingapp.category.CategoryRepository;
 import com.cakeshoppingapp.customer.Address;
 import com.cakeshoppingapp.customer.Customer;
 import com.cakeshoppingapp.customer.CustomerRepository;
@@ -19,13 +21,16 @@ public class DBInitializer implements CommandLineRunner {
 
 	private final CakeRepository cakeRepository;
 	private final CustomerRepository customerRepository;
+	private final CategoryRepository categoryRepository;
 	private final PasswordEncoder passwordEncoder;
 
 	public DBInitializer(FlavorRepository flavorRepository, CakeRepository cakeRepository,
-			CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+			CustomerRepository customerRepository, CategoryRepository categoryRepository,
+			PasswordEncoder passwordEncoder) {
 		this.flavorRepository = flavorRepository;
 		this.cakeRepository = cakeRepository;
 		this.customerRepository = customerRepository;
+		this.categoryRepository = categoryRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -33,6 +38,7 @@ public class DBInitializer implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		setUpCakes();
 		setUpCustomers();
+		setUpCategories();
 	}
 
 	void setUpCakes() {
@@ -120,4 +126,18 @@ public class DBInitializer implements CommandLineRunner {
 
 	}
 
+	private void setUpCategories() {
+
+		Category chocolateCategory = new Category(1L, "Cake", "Cake.png");
+		Category vanillaCategory = new Category(2L, "CupCake", "CupCake.png");
+		Category caramelCategory = new Category(3L, "Traditional", "traditioanl.png");
+		Category juiceCategory = new Category(4L, "Juice", "juice.png");
+		Category iceCreamCategory = new Category(5L, "IceCream", "traditioanl.png");
+
+		categoryRepository.save(chocolateCategory);
+		categoryRepository.save(vanillaCategory);
+		categoryRepository.save(caramelCategory);
+		categoryRepository.save(juiceCategory);
+		categoryRepository.save(iceCreamCategory);
+	}
 }

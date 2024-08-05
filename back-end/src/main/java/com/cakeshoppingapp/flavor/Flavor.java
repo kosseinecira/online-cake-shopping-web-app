@@ -38,10 +38,6 @@ public class Flavor implements Serializable {
 
 	@Column(length = 2000)
 	private String description;
-//	
-//	@JsonIgnore
-//	@OneToMany(cascade = CascadeType.REMOVE)
-//	private List<Cake> cakes = new ArrayList<>();
 
 	public Flavor(String name, String description) {
 		this.name = name;

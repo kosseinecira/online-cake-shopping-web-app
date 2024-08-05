@@ -28,14 +28,12 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		System.out.println("UserDetailsImpl getPassword");
 		return authenticationDTO.password();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		System.out.println("UserDetailsImpl getUsername");
 		return authenticationDTO.username();
 	}
 

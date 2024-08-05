@@ -8,10 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cakeshoppingapp.category.Category;
+import com.cakeshoppingapp.category.CategoryService;
 import com.cakeshoppingapp.converters.cake.CakeDtoToCakeConverter;
 import com.cakeshoppingapp.converters.cake.CakeToCakeDtoConverter;
 import com.cakeshoppingapp.dtoes.CakeDTO;
 import com.cakeshoppingapp.dtoes.CakeMultipleFileDTO;
+import com.cakeshoppingapp.dtoes.CategoryDTO;
 import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.flavor.Flavor;
 import com.cakeshoppingapp.flavor.FlavorService;
@@ -27,16 +30,17 @@ import jakarta.transaction.Transactional;
 public class CakeService {
 
 	private final CakeRepository cakeRepository;
-
+	private final CategoryService categoryService;
 	private final FlavorService flavorService;
 
 	private final CakeToCakeDtoConverter cakeToCakeDtoConverter;
 
 	private final CakeDtoToCakeConverter cakeDtoToCakeConverter;
 
-	public CakeService(CakeRepository cakeRepository, FlavorService flavorService,
+	public CakeService(CakeRepository cakeRepository,CategoryService categoryService, FlavorService flavorService,
 			CakeToCakeDtoConverter cakeToCakeDtoConverter, CakeDtoToCakeConverter cakeDtoToCakeConverter) {
 		this.cakeRepository = cakeRepository;
+		this.categoryService = categoryService;
 		this.flavorService = flavorService;
 		this.cakeToCakeDtoConverter = cakeToCakeDtoConverter;
 		this.cakeDtoToCakeConverter = cakeDtoToCakeConverter;
@@ -47,9 +51,10 @@ public class CakeService {
 				.orElseThrow(() -> new SomethingNotFoundException("Cake With Id: " + id));
 	}
 
-	public CakeDTO save(Long flavorId, CakeMultipleFileDTO cakeMultipleFileDTO) {
+	public CakeDTO save(Long categoryId, Long flavorId, CakeMultipleFileDTO cakeMultipleFileDTO) {
 
 		FlavorDTO flavorDTO = flavorService.findById(flavorId);
+		CategoryDTO categoryDTO = categoryService.findById(categoryId);
 		// CHECK THE NAME OF THE CAKE IF IT IS ALREADY EXIST
 		handleIfCakeExist(cakeMultipleFileDTO.name());
 		// save images on the server side (resource folder). and return a list of
@@ -64,11 +69,12 @@ public class CakeService {
 				cakeMultipleFileDTO.weight(), cakeMultipleFileDTO.netQuantity(), cakeMultipleFileDTO.isItAllergen(),
 				cakeMultipleFileDTO.ingredients(), cakeMultipleFileDTO.deliveryInformation(),
 				cakeMultipleFileDTO.description(), cakeMultipleFileDTO.noteDescription(),
-				cakeMultipleFileDTO.messageOnCake(), list, flavorDTO.name());
+				cakeMultipleFileDTO.messageOnCake(), list, flavorDTO.name(), categoryDTO.name());
 
 		Cake cakeEntity = cakeDtoToCakeConverter.convert(cakeDTO);
 		// SET THE FLAVOR OF THE CAKE
 		cakeEntity.setFlavor(new Flavor(flavorDTO.id(), flavorDTO.name(), flavorDTO.description()));
+		cakeEntity.setCategory(new Category(categoryDTO.id(), categoryDTO.name()));
 
 		Cake cakeResult = cakeRepository.save(cakeEntity);
 		return cakeToCakeDtoConverter.convert(cakeResult);
@@ -87,9 +93,10 @@ public class CakeService {
 		return cakeRepository.findAll().stream().map(cake -> cakeToCakeDtoConverter.convert(cake)).toList();
 	}
 
-	public CakeDTO update(Long flavorId, Long cakeId, CakeDTO cakeUpdate) {
+	public CakeDTO update(Long categoryId, Long flavorId, Long cakeId, CakeDTO cakeUpdate) {
 		//
 		FlavorDTO flavorDTO = flavorService.findById(flavorId);
+		CategoryDTO categoryDTO = categoryService.findById(categoryId);
 
 		Cake updatedCake = cakeRepository.findById(cakeId).map(cake -> {
 			cake.setName(cakeUpdate.name());
@@ -106,6 +113,7 @@ public class CakeService {
 			cake.setMessageOnCake(cakeUpdate.messageOnCake());
 			cake.setCakeImages(cakeUpdate.cakeImages());
 			cake.setFlavor(new Flavor(flavorDTO.id(), flavorDTO.name(), flavorDTO.description()));
+			cake.setCategory(new Category(categoryDTO.id(), categoryDTO.name()));
 			return cakeRepository.save(cake);
 		}).orElseThrow(() -> new SomethingNotFoundException("Cake With Id: " + cakeId));
 		return cakeToCakeDtoConverter.convert(updatedCake);

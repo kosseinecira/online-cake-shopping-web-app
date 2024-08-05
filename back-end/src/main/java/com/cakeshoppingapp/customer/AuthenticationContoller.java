@@ -27,5 +27,7 @@ public class AuthenticationContoller {
 		return new Result(true, StatusCode.SUCCESS, "User Info and JSON Web Token",
 				authenticationService.createLoginInfo(authentication));
 	}
+	
+	
 
 }

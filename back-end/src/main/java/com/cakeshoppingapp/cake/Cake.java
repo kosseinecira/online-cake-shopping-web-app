@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.cakeshoppingapp.category.Category;
 import com.cakeshoppingapp.flavor.Flavor;
 import com.cakeshoppingapp.image.CakeImage;
 
@@ -62,6 +63,11 @@ public class Cake implements Serializable {
 	@JoinColumn(name = "")
 	private Flavor flavor;
 
+	@ManyToOne()
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "")
+	private Category category;
+
 	public Cake(Long id, String name, double price, double discount, double diameter, double height, double weight,
 			int netQuantity, boolean isItAllergen, String ingredients, String deliveryInformation, String description,
 			String noteDescription, String messageOnCake, List<CakeImage> cakeImages, Flavor flavor) {
@@ -85,7 +91,8 @@ public class Cake implements Serializable {
 
 	public Cake(String name, double price, double discount, double diameter, double height, double weight,
 			int netQuantity, boolean isItAllergen, String ingredients, String deliveryInformation, String description,
-			String noteDescription, String messageOnCake, List<CakeImage> cakeImages, Flavor flavor) {
+			String noteDescription, String messageOnCake, List<CakeImage> cakeImages, Flavor flavor,
+			Category category) {
 		this.name = name;
 		this.price = price;
 		this.discount = discount;
@@ -101,6 +108,7 @@ public class Cake implements Serializable {
 		this.messageOnCake = messageOnCake;
 		this.cakeImages = cakeImages;
 		this.flavor = flavor;
+		this.category = category;
 	}
 
 }

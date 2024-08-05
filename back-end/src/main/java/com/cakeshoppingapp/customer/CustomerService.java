@@ -117,7 +117,6 @@ public class CustomerService implements UserDetailsService {
 		if (emailExist) {
 			throw new SomethingAlreadyExistException("Customer With Email: " + email);
 		}
-
 	}
 
 	public void blockAndUnblockCustomerById(Long id) {

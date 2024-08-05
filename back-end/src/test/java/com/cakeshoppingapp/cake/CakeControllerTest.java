@@ -77,17 +77,17 @@ public class CakeControllerTest {
 
 		chocolateDelightCakeDTO = new CakeDTO(1L, "Chocolate Delight", 25.5, 5.0, 8.0, 4.0, 1.5, 10, false,
 				"Flour, Sugar, Cocoa, Butter, Eggs", "Delivery within 3-5 days", "A rich and moist chocolate cake",
-				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavorDTO.name());
+				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavorDTO.name(),"category1");
 
 		vanillarCakeDTO = new CakeDTO(2L, "Vanilla Cake", 20.99, 3.00, 9.0, 4.5, 1.1, 1, true,
 				"Flour, Sugar, Vanilla, Eggs, Butter", "Deliver within 2-4 business days",
 				"A classic vanilla cake perfect for any occasion.", "Store in a cool place", "Congratulations", null,
-				vanillaFlavorDTO.name());
+				vanillaFlavorDTO.name(),"category1");
 
 		redVelvetCakeDTO = new CakeDTO(3L, "Red Velvet Cake", 30.99, 4.00, 11.0, 5.5, 1.3, 1, false,
 				"Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter", "Deliver within 1-3 business days",
 				"A rich and moist red velvet cake with cream cheese frosting.", "Keep refrigerated", "Best Wishes",
-				null, caramelFlavorDTO.name());
+				null, caramelFlavorDTO.name(),"category1");
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class CakeControllerTest {
 		CakeDTO classicVanillaLayerCakeDTO = new CakeDTO(5L, "Classic Vanilla Layer Cake", 50.0, 12.0, 12.0, 6.0, 4.0,
 				8, false, "Flour, Sugar, Butter, Eggs, Vanilla Extract, Baking Powder, Milk",
 				"Delivery within 3-5 days", "A classic vanilla layer cake with rich buttercream frosting",
-				"Store in a cool place", "Congratulations!", new ArrayList<CakeImage>(), vanillaFlavorDTO.name());
+				"Store in a cool place", "Congratulations!", new ArrayList<CakeImage>(), vanillaFlavorDTO.name(),"category1");
 
 		CakeMultipleFileDTO cakeMultipleFileDTO = new CakeMultipleFileDTO("Classic Vanilla Layer Cake", 50.0, 12.0,
 				12.0, 6.0, 4.0, 8, false, "Flour, Sugar, Butter, Eggs, Vanilla Extract, Baking Powder, Milk",
@@ -162,7 +162,7 @@ public class CakeControllerTest {
 		MockMultipartFile jsonFile = new MockMultipartFile("cakeMultipleFileDTO", "",
 				MediaType.MULTIPART_FORM_DATA_VALUE, dtoAsJson.getBytes());
 
-		given(cakeService.save(vanillaFlavorDTO.id(), cakeMultipleFileDTO)).willReturn(classicVanillaLayerCakeDTO);
+		given(cakeService.save(1L,vanillaFlavorDTO.id(), cakeMultipleFileDTO)).willReturn(classicVanillaLayerCakeDTO);
 
 		mockMvc.perform(multipart(HttpMethod.POST, "/flavors/{flavorId}/cakes", vanillaFlavorDTO.id())
 				.file("cakeMultipleFileDTO", jsonFile.getBytes()).accept(MediaType.APPLICATION_JSON)
@@ -185,7 +185,7 @@ public class CakeControllerTest {
 				"Store in a cool place", "Congratulations!", null);
 
 		String dtoAsJson = objectMapper.writeValueAsString(cakeMultipleFileDTO);
-		given(cakeService.save(eq(chocolateDelightCakeDTO.id()), cakeMultipleFileDTO))
+		given(cakeService.save(eq(1L),eq(chocolateDelightCakeDTO.id()), cakeMultipleFileDTO))
 				.willThrow(new SomethingAlreadyExistException("Cake With Name: " + chocolateDelightCakeDTO.name()));
 
 		mockMvc.perform(post("/flavors/{flavorId}/cakes", chocolateDelightCakeDTO.id())

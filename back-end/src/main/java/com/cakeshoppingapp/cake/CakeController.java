@@ -1,6 +1,13 @@
 package com.cakeshoppingapp.cake;
 
+import java.net.URI;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +33,19 @@ public class CakeController {
 		this.cakeService = cakeService;
 	}
 
-	@PostMapping(value = "/flavors/{flavorId}/cakes", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public Result save(@Valid CakeMultipleFileDTO cakeMultipleFileDTO, @PathVariable("flavorId") Long flavorId) {
+	@GetMapping("/responseEntity")
+	public ResponseEntity<Cake> index() {
+		Cake cake = new Cake();
+	//	return new ResponseEntity<>(cake, HttpStatus.CREATED);
+		return ResponseEntity.created(URI.create("/cakes/" + 3654)).body(cake);
+	}
+
+	@PostMapping(value = "/categories/{categoryId}/flavors/{flavorId}/cakes", consumes = {
+			MediaType.MULTIPART_FORM_DATA_VALUE })
+	public Result save(@Valid @RequestParam("cakeDto") CakeMultipleFileDTO cakeMultipleFileDTO,
+			@PathVariable("categoryId") Long categoryId, @PathVariable("flavorId") Long flavorId) {
 		return new Result(true, StatusCode.SUCCESS, "Cake Saved Successfully!",
-				cakeService.save(flavorId, cakeMultipleFileDTO));
+				cakeService.save(categoryId, flavorId, cakeMultipleFileDTO));
 	}
 
 	@GetMapping("/flavors/{flavorId}/cakes/{cakeId}")
@@ -37,11 +53,11 @@ public class CakeController {
 		return new Result(true, StatusCode.SUCCESS, "Cake Found!", cakeService.findById(cakeId));
 	}
 
-	@PutMapping("/flavors/{flavorId}/cakes/{cakeId}")
-	public Result updateCake(@PathVariable("flavorId") Long flavorId, @PathVariable("cakeId") Long cakeId,
-			@Valid @RequestBody CakeDTO cakeDto) {
+	@PutMapping("/categories/{categoryId}/flavors/{flavorId}/cakes/{cakeId}")
+	public Result updateCake(@PathVariable("categoryId") Long categoryId, @PathVariable("flavorId") Long flavorId,
+			@PathVariable("cakeId") Long cakeId, @Valid @RequestBody CakeDTO cakeDto) {
 		return new Result(true, StatusCode.SUCCESS, "Cake Updated Successfully!",
-				cakeService.update(flavorId, cakeId, cakeDto));
+				cakeService.update(categoryId, flavorId, cakeId, cakeDto));
 	}
 
 	@DeleteMapping("/flavors/{flavorId}/cakes/{cakeId}")
@@ -65,4 +81,11 @@ public class CakeController {
 		return new Result(true, StatusCode.SUCCESS, "Cakes Found Under Flavor " + flavorId,
 				cakeService.findByFlavorId(flavorId));
 	}
+
+	@GetMapping(value = "/categories/{categoryId}/cakes")
+	public Result findAllByCategoryId(@PathVariable("categoryId") Long categoryId) {
+		return null;
+
+	}
+
 }
