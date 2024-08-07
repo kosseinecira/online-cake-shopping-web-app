@@ -34,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return authenticationDTO.username();
+		return getEmail();
 	}
 
 	@Override
@@ -63,6 +63,10 @@ public class UserDetailsImpl implements UserDetails {
 
 	public AuthenticationDTO getAuthenticationDTO() {
 		return authenticationDTO;
+	}
+
+	public String getEmail() {
+		return authenticationDTO.email();
 	}
 
 }

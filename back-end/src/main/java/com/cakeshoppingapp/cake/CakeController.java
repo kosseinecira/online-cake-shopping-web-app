@@ -1,13 +1,6 @@
 package com.cakeshoppingapp.cake;
 
-import java.net.URI;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,14 +25,7 @@ public class CakeController {
 	public CakeController(CakeService cakeService) {
 		this.cakeService = cakeService;
 	}
-
-	@GetMapping("/responseEntity")
-	public ResponseEntity<Cake> index() {
-		Cake cake = new Cake();
-	//	return new ResponseEntity<>(cake, HttpStatus.CREATED);
-		return ResponseEntity.created(URI.create("/cakes/" + 3654)).body(cake);
-	}
-
+	
 	@PostMapping(value = "/categories/{categoryId}/flavors/{flavorId}/cakes", consumes = {
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public Result save(@Valid @RequestParam("cakeDto") CakeMultipleFileDTO cakeMultipleFileDTO,

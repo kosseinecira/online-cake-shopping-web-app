@@ -11,6 +11,6 @@ public class AuthenticationDtoToCustomerConverter implements Converter<Authentic
 
 	@Override
 	public Customer convert(AuthenticationDTO source) {
-		return new Customer(source.id(), source.username(), source.email(), source.password(), source.role());
+		return new Customer(source.id(), source.email(), source.password(), source.role());
 	}
 }
