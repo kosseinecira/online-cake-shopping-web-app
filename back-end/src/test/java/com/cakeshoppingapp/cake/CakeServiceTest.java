@@ -99,7 +99,7 @@ class CakeServiceTest {
 
 		chocolateDelightCakeDTO = new CakeDTO(1L, "Chocolate Delight", 25.5, 5.0, 8.0, 4.0, 1.5, 10, false,
 				"Flour, Sugar, Cocoa, Butter, Eggs", "Delivery within 3-5 days", "A rich and moist chocolate cake",
-				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavor.getName());
+				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavor.getName(),"category1");
 
 		vanillaCake = new Cake(2L, "Vanilla Cake", 20.99, 3.00, 9.0, 4.5, 1.1, 1, true,
 				"Flour, Sugar, Vanilla, Eggs, Butter", "Deliver within 2-4 business days",
@@ -113,7 +113,7 @@ class CakeServiceTest {
 		redVelvetCakeDTO = new CakeDTO(3L, "Red Velvet Cake", 30.99, 4.00, 11.0, 5.5, 1.3, 1, false,
 				"Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter", "Deliver within 1-3 business days",
 				"A rich and moist red velvet cake with cream cheese frosting.", "Keep refrigerated", "Best Wishes",
-				null, caramelFlavor.getName());
+				null, caramelFlavor.getName(),"category1");
 		caramelDripCake = new Cake(4L, "Caramel Drip Cake", 60.0, 10.0, 11.0, 6.0, 4.0, 10, false,
 				"Flour, Sugar, Butter, Eggs, Caramel Sauce, Cream, Vanilla Extract", "Delivery within 3-4 days",
 				"A rich caramel cake with layers of caramel buttercream and caramel drip", "Store in a cool place",
@@ -180,7 +180,7 @@ class CakeServiceTest {
 		CakeDTO expectedVanillaCheeseCakeDTO = new CakeDTO(4L, "Vanilla Cheesecake", 40.0, 10.0, 10.0, 4.5, 3.0, 6,
 				false, "Cream Cheese, Flour, Sugar, Butter, Eggs, Vanilla Extract", "Delivery within 1-2 days",
 				"A creamy and rich vanilla cheesecake", "Store in a cool place", "Best Wishes!", null,
-				vanillaFlavor.getName());
+				vanillaFlavor.getName(),"category1");
 		// this what should be returned when call flavorService.findById().
 		FlavorDTO vanillaFlavorDTO = new FlavorDTO(vanillaFlavor.getId(), vanillaFlavor.getName(),
 				vanillaFlavor.getDescription());
@@ -202,7 +202,7 @@ class CakeServiceTest {
 				.setFlavor(new Flavor(vanillaFlavorDTO.id(), vanillaFlavorDTO.name(), vanillaFlavorDTO.description()));
 		given(cakeRepository.save(any(Cake.class))).willReturn(vanillaCheeseCake);
 
-		CakeDTO returnedCakeDTO = cakeService.save(vanillaCheeseCake.getId(), cakeMultipleFileDTO);
+		CakeDTO returnedCakeDTO = cakeService.save(1L,vanillaCheeseCake.getId(), cakeMultipleFileDTO);
 
 		assertEquals(expectedVanillaCheeseCakeDTO.id(), returnedCakeDTO.id());
 		assertEquals(expectedVanillaCheeseCakeDTO.name(), returnedCakeDTO.name());
@@ -219,7 +219,7 @@ class CakeServiceTest {
 				"Keep refrigerated", "Best Wishes", null);
 		given(cakeRepository.findByName(cakeNameAlreadyInTheDB)).willReturn(Optional.of(redVelvetCake));
 		assertThrows(SomethingAlreadyExistException.class,
-				() -> cakeService.save(redVelvetCake.getId(), cakeMultipleFileDTO));
+				() -> cakeService.save(1L,redVelvetCake.getId(), cakeMultipleFileDTO));
 		verify(cakeRepository, times(1)).findByName(cakeNameAlreadyInTheDB);
 	}
 
@@ -269,7 +269,7 @@ class CakeServiceTest {
 		CakeDTO updatedRedVelvetCakeDTO = new CakeDTO(3L, "Red Velvet Cake Extra Chocolate", 40.58, 5.00, 10.5, 5.5,
 				1.3, 1, true, "Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter",
 				"Deliver within 1-4 business days", "A rich and moist red velvet cake with cream cheese frosting.",
-				"Keep refrigerated", "Best Wishes", null, chocolateFlavor.getName());
+				"Keep refrigerated", "Best Wishes", null, chocolateFlavor.getName(),"category1");
 
 		FlavorDTO chocolateFlavorDTO = new FlavorDTO(1L, "Chocolate",
 				"Chocolate cake boasts a deep," + " indulgent flavor with rich cocoa undertones and a moist,"
@@ -280,7 +280,7 @@ class CakeServiceTest {
 		given(cakeRepository.findById(updatedRedVelvetCake.getId())).willReturn(Optional.of(redVelvetCake));
 		given(cakeRepository.save(any(Cake.class))).willReturn(updatedRedVelvetCake);
 		given(cakeToCakeDtoConverter.convert(updatedRedVelvetCake)).willReturn(updatedRedVelvetCakeDTO);
-		CakeDTO returnedValueCakeDTO = cakeService.update(chocolateFlavorDTO.id(), updatedRedVelvetCake.getId(),
+		CakeDTO returnedValueCakeDTO = cakeService.update(1L,chocolateFlavorDTO.id(), updatedRedVelvetCake.getId(),
 				updatedRedVelvetCakeDTO);
 
 		assertEquals(returnedValueCakeDTO.id(), updatedRedVelvetCake.getId());
@@ -298,7 +298,7 @@ class CakeServiceTest {
 		Long cakeId = 5L;
 		given(cakeRepository.findById(cakeId)).willThrow(new SomethingNotFoundException("With Id: " + 5L));
 		// DTO is irrelevant in that case.
-		assertThrows(SomethingNotFoundException.class, () -> cakeService.update(flavorId, cakeId, null));
+		assertThrows(SomethingNotFoundException.class, () -> cakeService.update(1L,flavorId, cakeId, null));
 		verify(cakeRepository, times(1)).findById(5L);
 	}
 

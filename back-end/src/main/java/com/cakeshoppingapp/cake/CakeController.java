@@ -25,11 +25,13 @@ public class CakeController {
 	public CakeController(CakeService cakeService) {
 		this.cakeService = cakeService;
 	}
-
-	@PostMapping(value = "/flavors/{flavorId}/cakes", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public Result save(@Valid CakeMultipleFileDTO cakeMultipleFileDTO, @PathVariable("flavorId") Long flavorId) {
+	
+	@PostMapping(value = "/categories/{categoryId}/flavors/{flavorId}/cakes", consumes = {
+			MediaType.MULTIPART_FORM_DATA_VALUE })
+	public Result save(@Valid @RequestParam("cakeDto") CakeMultipleFileDTO cakeMultipleFileDTO,
+			@PathVariable("categoryId") Long categoryId, @PathVariable("flavorId") Long flavorId) {
 		return new Result(true, StatusCode.SUCCESS, "Cake Saved Successfully!",
-				cakeService.save(flavorId, cakeMultipleFileDTO));
+				cakeService.save(categoryId, flavorId, cakeMultipleFileDTO));
 	}
 
 	@GetMapping("/flavors/{flavorId}/cakes/{cakeId}")
@@ -37,11 +39,11 @@ public class CakeController {
 		return new Result(true, StatusCode.SUCCESS, "Cake Found!", cakeService.findById(cakeId));
 	}
 
-	@PutMapping("/flavors/{flavorId}/cakes/{cakeId}")
-	public Result updateCake(@PathVariable("flavorId") Long flavorId, @PathVariable("cakeId") Long cakeId,
-			@Valid @RequestBody CakeDTO cakeDto) {
+	@PutMapping("/categories/{categoryId}/flavors/{flavorId}/cakes/{cakeId}")
+	public Result updateCake(@PathVariable("categoryId") Long categoryId, @PathVariable("flavorId") Long flavorId,
+			@PathVariable("cakeId") Long cakeId, @Valid @RequestBody CakeDTO cakeDto) {
 		return new Result(true, StatusCode.SUCCESS, "Cake Updated Successfully!",
-				cakeService.update(flavorId, cakeId, cakeDto));
+				cakeService.update(categoryId, flavorId, cakeId, cakeDto));
 	}
 
 	@DeleteMapping("/flavors/{flavorId}/cakes/{cakeId}")
@@ -65,4 +67,11 @@ public class CakeController {
 		return new Result(true, StatusCode.SUCCESS, "Cakes Found Under Flavor " + flavorId,
 				cakeService.findByFlavorId(flavorId));
 	}
+
+	@GetMapping(value = "/categories/{categoryId}/cakes")
+	public Result findAllByCategoryId(@PathVariable("categoryId") Long categoryId) {
+		return null;
+
+	}
+
 }

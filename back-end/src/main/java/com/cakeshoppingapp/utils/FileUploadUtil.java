@@ -28,16 +28,17 @@ public class FileUploadUtil {
 
 	public static String[] saveImageToPath(MultipartFile image, String imagesPath) {
 		String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-		String savePath = servletContext.getRealPath("/") + imagesPath;
+		System.out.println("file name :::: " + fileName);
 		if (!Arrays.asList("jpg", "jpeg", "png").contains(StringUtils.getFilenameExtension(fileName)))
 			throw new NotSupportedException(
 					"File Type: " + StringUtils.getFilenameExtension(fileName) + " Not Supported");
 		try {
-			FileUploadUtil.saveFile(savePath, fileName, image);
+			FileUploadUtil.saveFile(imagesPath, fileName, image);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new String[] { fileName, savePath + fileName };
+		System.out.println(imagesPath);
+		return new String[] { fileName, imagesPath};
 	}
 
 	private static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
@@ -52,4 +53,6 @@ public class FileUploadUtil {
 			throw new IOException("Could not save image file: " + fileName, ioe);
 		}
 	}
+	
+	
 }

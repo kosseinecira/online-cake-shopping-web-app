@@ -47,9 +47,10 @@ public class CustomerService implements UserDetailsService {
 	}
 
 	public AuthenticationDTO save(AuthenticationDTO authenticationDTO) {
-		checkCustomerExistance(authenticationDTO.username(), authenticationDTO.email());
+		checkCustomerExistance(authenticationDTO.email());
 		Customer customer = authenticationDtoToCustomerConverter.convert(authenticationDTO);
 		customer.setPassword(passwordEncoder.encode(authenticationDTO.password()));
+		customer.setRole("USER");
 		return customerToAuthenticationDtoConverter.convert(customerRepository.save(customer));
 	}
 
@@ -108,16 +109,16 @@ public class CustomerService implements UserDetailsService {
 		return FileUploadUtil.saveImageToPath(image, imagesPath)[1];
 	}
 
-	private void checkCustomerExistance(String username, String email) {
-		boolean usernameExist = customerRepository.findByUsername(username).isPresent();
-		boolean emailExist = customerRepository.findByUsername(email).isPresent();
-		if (usernameExist) {
-			throw new SomethingAlreadyExistException("Customer With Username: " + username);
-		}
+	private void checkCustomerExistance(String email) {
+		// boolean usernameExist =
+		// customerRepository.findByUsername(username).isPresent();
+		boolean emailExist = customerRepository.findByEmail(email).isPresent();
+//		if (usernameExist) {
+//			throw new SomethingAlreadyExistException("Customer With Username: " + username);
+//		}
 		if (emailExist) {
 			throw new SomethingAlreadyExistException("Customer With Email: " + email);
 		}
-
 	}
 
 	public void blockAndUnblockCustomerById(Long id) {
@@ -128,13 +129,12 @@ public class CustomerService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Customer customer = customerRepository.findByEmail(email)
+				.orElseThrow(() -> new SomethingNotFoundException("Customer With Email: " + email));
 
-		Customer customer = customerRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username));
-
-		AuthenticationDTO authenticationDTO = new AuthenticationDTO(customer.getId(), customer.getUsername(),
-				customer.getEmail(), customer.getPassword(), customer.isBlocked(), customer.getRole());
+		AuthenticationDTO authenticationDTO = new AuthenticationDTO(customer.getId(), customer.getEmail(),
+				customer.getPassword(), customer.isBlocked(), customer.getRole());
 
 		return new UserDetailsImpl(authenticationDTO);
 	}

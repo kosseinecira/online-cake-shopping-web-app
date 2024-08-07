@@ -54,9 +54,8 @@ public class Customer {
 	@JoinColumn
 	private Address address;
 
-	public Customer(Long id, String username, String email, String password, String role) {
+	public Customer(Long id, String email, String password, String role) {
 		this.id = id;
-		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.role = role;
