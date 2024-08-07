@@ -50,11 +50,12 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		// this will will handle null value if the base url is not configured in application.properties file
-		this.BASE_URL = (BASE_URL== null) || (BASE_URL.isEmpty()) ? "" : BASE_URL;
-		
+		// this will will handle null value if the base url is not configured in
+		// application.properties file
+		this.BASE_URL = (BASE_URL == null) || (BASE_URL.isEmpty()) ? "" : BASE_URL;
+
 		// Here we configure Authorization rules
-		
+
 		return http.authorizeHttpRequests(request -> request
 		// categories
 //				.requestMatchers(HttpMethod.POST, BASE_URL + "/categories").hasAuthority("ROLE_ADMIN")
@@ -79,11 +80,9 @@ public class SecurityConfig {
 				// .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll().anyRequest()
 				// .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1")).permitAll().anyRequest()
 
-				//.requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
-				.anyRequest().authenticated())
-				.headers(header -> header.frameOptions().disable()).csrf(csrf -> csrf.disable())
-				.httpBasic(Customizer.withDefaults())
-				.oauth2ResourceServer(o -> o.jwt())
+				// .requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
+				.anyRequest().authenticated()).headers(header -> header.frameOptions().disable())
+				.csrf(csrf -> csrf.disable()).httpBasic(Customizer.withDefaults()).oauth2ResourceServer(o -> o.jwt())
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(Customizer.withDefaults())
 
