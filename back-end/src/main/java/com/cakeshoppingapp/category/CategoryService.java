@@ -82,9 +82,9 @@ public class CategoryService {
 				Constant.IMAGE_PATH + s + "categories_images");
 		System.out.println("IMAGE NAME :: " + imageInfo[0]);
 		System.out.println("IMAGE PATH :: " + imageInfo[1]);
-		//Note: The Slashes in the path is URL slashes not system slashes!!
+		// Note: The Slashes in the path is URL slashes not system slashes!!
 		String result = ServletUriComponentsBuilder.fromCurrentContextPath()
-				.path("/images/categories_images/"+ imageInfo[0]).toUriString();
+				.path("/images/categories_images/" + imageInfo[0]).toUriString();
 		return result;
 	}
 

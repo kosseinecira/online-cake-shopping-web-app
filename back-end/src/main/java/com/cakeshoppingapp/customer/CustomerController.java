@@ -28,7 +28,7 @@ public class CustomerController {
 	public CustomerController(CustomerService customerService) {
 		this.customerService = customerService;
 	}
-	
+
 	@PostMapping("/users")
 	public Result addUser(@Valid @RequestBody AuthenticationDTO customerDTO) {
 		AuthenticationDTO customer = customerService.save(customerDTO);

@@ -36,13 +36,18 @@ public class DBInitializer implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		setUpCakes();
-		setUpCustomers();
 		setUpCategories();
+		setUpCustomers();
+		setUpCakes();
+
 	}
 
 	void setUpCakes() {
 
+		Category cakeCategory = new Category(1L, "Cake",
+				"https://images.pexels.com/photos/1414234/pexels-photo-1414234.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category traditionalCategory = new Category(3L, "Traditional",
+				"https://images.pexels.com/photos/10865949/pexels-photo-10865949.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
 		Flavor chocolateFlavor = new Flavor(1L, "Chocolate",
 				"Chocolate cake boasts a deep," + " indulgent flavor with rich cocoa undertones and a moist,"
 						+ " tender crumb. Its intense and satisfying taste is often"
@@ -61,26 +66,26 @@ public class DBInitializer implements CommandLineRunner {
 
 		Cake cake1 = new Cake(1L, "Chocolate Delight", 25.5, 5.0, 8.0, 4.0, 1.5, 10, false,
 				"Flour, Sugar, Cocoa, Butter, Eggs", "Delivery within 3-5 days", "A rich and moist chocolate cake",
-				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavor);
+				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavor, traditionalCategory);
 
 		Cake cake2 = new Cake(2L, "Vanilla Cake", 20.99, 3.00, 9.0, 4.5, 1.1, 1, true,
 				"Flour, Sugar, Vanilla, Eggs, Butter", "Deliver within 2-4 business days",
 				"A classic vanilla cake perfect for any occasion.", "Store in a cool place", "Congratulations", null,
-				vanillaFlavor);
+				vanillaFlavor, cakeCategory);
 
 		Cake cake3 = new Cake(3L, "Red Velvet Cake", 30.99, 4.00, 11.0, 5.5, 1.3, 1, false,
 				"Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter", "Deliver within 1-3 business days",
 				"A rich and moist red velvet cake with cream cheese frosting.", "Keep refrigerated", "Best Wishes",
-				null, caramelFlavor);
+				null, caramelFlavor, traditionalCategory);
 
 		Cake cake4 = new Cake(4L, "Caramel Drip Cake", 60.0, 10.0, 11.0, 6.0, 4.0, 10, false,
 				"Flour, Sugar, Butter, Eggs, Caramel Sauce, Cream, Vanilla Extract", "Delivery within 3-4 days",
 				"A rich caramel cake with layers of caramel buttercream and caramel drip", "Store in a cool place",
-				"Best wishes on your celebration!", null, caramelFlavor);
+				"Best wishes on your celebration!", null, caramelFlavor, traditionalCategory);
 		Cake cake5 = new Cake(5L, "Chocolate Truffle Cake", 50.0, 10.0, 9.0, 5.0, 4.2, 8, false,
 				"Flour, Sugar, Cocoa Powder, Butter, Eggs, Dark Chocolate, Heavy Cream", "Delivery within 3-4 days",
 				"A rich chocolate cake filled with creamy chocolate truffle", "Store in a cool place",
-				"Happy Birthday!", null, chocolateFlavor);
+				"Happy Birthday!", null, chocolateFlavor, cakeCategory);
 
 		flavorRepository.save(chocolateFlavor);
 		flavorRepository.save(vanillaFlavor);
@@ -128,16 +133,23 @@ public class DBInitializer implements CommandLineRunner {
 
 	private void setUpCategories() {
 
-		Category cakeCategory = new Category(1L, "Cake", "Cake.png");
-		Category cupCakeCategory = new Category(2L, "CupCake", "CupCake.png");
-		Category traditionalCategory = new Category(3L, "Traditional", "traditioanl.png");
-		Category juiceCategory = new Category(4L, "Juice", "juice.png");
-		Category iceCreamCategory = new Category(5L, "IceCream", "traditioanl.png");
-
+		Category cakeCategory = new Category(1L, "Cake",
+				"https://images.pexels.com/photos/1414234/pexels-photo-1414234.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category cupCakeCategory = new Category(2L, "CupCake",
+				"https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category traditionalCategory = new Category(3L, "Traditional",
+				"https://images.pexels.com/photos/10865949/pexels-photo-10865949.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category juiceCategory = new Category(4L, "Juice",
+				"https://images.pexels.com/photos/1438077/pexels-photo-1438077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category iceCreamCategory = new Category(5L, "IceCream",
+				"https://images.pexels.com/photos/2586924/pexels-photo-2586924.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+		Category breadCategory = new Category(6L, "Bread",
+				"https://images.pexels.com/photos/2026371/pexels-photo-2026371.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
 		categoryRepository.save(cakeCategory);
 		categoryRepository.save(cupCakeCategory);
 		categoryRepository.save(traditionalCategory);
 		categoryRepository.save(juiceCategory);
 		categoryRepository.save(iceCreamCategory);
+		categoryRepository.save(breadCategory);
 	}
 }

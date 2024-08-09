@@ -38,7 +38,7 @@ public class FileUploadUtil {
 			e.printStackTrace();
 		}
 		System.out.println(imagesPath);
-		return new String[] { fileName, imagesPath};
+		return new String[] { fileName, imagesPath };
 	}
 
 	private static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
@@ -53,6 +53,5 @@ public class FileUploadUtil {
 			throw new IOException("Could not save image file: " + fileName, ioe);
 		}
 	}
-	
-	
+
 }

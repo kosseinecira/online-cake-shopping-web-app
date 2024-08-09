@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cakeshoppingapp.authentication.UserDetailsImpl;
 import com.cakeshoppingapp.converters.customer.AuthenticationDtoToCustomerConverter;
 import com.cakeshoppingapp.converters.customer.CustomerDtoToCustomerConverter;
 import com.cakeshoppingapp.converters.customer.CustomerToAuthenticationDtoConverter;

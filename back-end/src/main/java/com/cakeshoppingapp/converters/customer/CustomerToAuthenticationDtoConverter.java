@@ -11,8 +11,8 @@ public class CustomerToAuthenticationDtoConverter implements Converter<Customer,
 
 	@Override
 	public AuthenticationDTO convert(Customer source) {
-		return new AuthenticationDTO(source.getId(), source.getEmail(), source.getPassword(),
-				source.isBlocked(), source.getRole());
+		return new AuthenticationDTO(source.getId(), source.getEmail(), source.getPassword(), source.isBlocked(),
+				source.getRole());
 	}
 
 }

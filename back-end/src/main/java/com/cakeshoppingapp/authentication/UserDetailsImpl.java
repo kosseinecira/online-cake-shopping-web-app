@@ -1,4 +1,4 @@
-package com.cakeshoppingapp.customer;
+package com.cakeshoppingapp.authentication;
 
 import java.util.Arrays;
 import java.util.Collection;

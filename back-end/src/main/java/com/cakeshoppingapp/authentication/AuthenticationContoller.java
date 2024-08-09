@@ -1,4 +1,4 @@
-package com.cakeshoppingapp.customer;
+package com.cakeshoppingapp.authentication;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +28,11 @@ public class AuthenticationContoller {
 		return new Result(true, StatusCode.SUCCESS, "User Info and JSON Web Token",
 				authenticationService.createLoginInfo(authentication));
 	}
-	
+
 //	@PostMapping(value="/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 //	public Result createUser(@RequestBody(required = true) AuthenticationDTO authenticationDTO) {
 //		customerService.save(authenticationDTO);
 //		return new Result(true, StatusCode.CREATED, "User Created Successfully!");
 //	}
-	
-	
 
 }

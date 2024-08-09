@@ -70,29 +70,9 @@ public class Cake implements Serializable {
 
 	public Cake(Long id, String name, double price, double discount, double diameter, double height, double weight,
 			int netQuantity, boolean isItAllergen, String ingredients, String deliveryInformation, String description,
-			String noteDescription, String messageOnCake, List<CakeImage> cakeImages, Flavor flavor) {
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.discount = discount;
-		this.diameter = diameter;
-		this.height = height;
-		this.weight = weight;
-		this.netQuantity = netQuantity;
-		this.isItAllergen = isItAllergen;
-		this.ingredients = ingredients;
-		this.deliveryInformation = deliveryInformation;
-		this.description = description;
-		this.noteDescription = noteDescription;
-		this.messageOnCake = messageOnCake;
-		this.cakeImages = cakeImages;
-		this.flavor = flavor;
-	}
-
-	public Cake(String name, double price, double discount, double diameter, double height, double weight,
-			int netQuantity, boolean isItAllergen, String ingredients, String deliveryInformation, String description,
 			String noteDescription, String messageOnCake, List<CakeImage> cakeImages, Flavor flavor,
 			Category category) {
+		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.discount = discount;

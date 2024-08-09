@@ -5,7 +5,7 @@ public class StatusCode {
 	public static final int SUCCESS = 200;
 	public static final int CREATED = 201;
 	public static final int UPDATED = 204;
-	//204 not content returned
+	// 204 not content returned
 	public static final int DELETED = 204;
 	public static final int NOT_FOUND = 404;
 	public static final int ALREADY_EXIST = 409;

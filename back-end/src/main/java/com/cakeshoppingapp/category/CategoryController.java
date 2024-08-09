@@ -47,7 +47,8 @@ public class CategoryController {
 
 	@PutMapping(value = "/categories/{categoryId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public Result updateCategory(@PathVariable("categoryId") Long id, @RequestPart("categoryDto") CategoryDTO categoryDTO,
+	public Result updateCategory(@PathVariable("categoryId") Long id,
+			@RequestPart("categoryDto") CategoryDTO categoryDTO,
 			@RequestPart(value = "categoryImage", required = false) MultipartFile categoryImage) {
 		return new Result(true, StatusCode.UPDATED, "Category Added Successfully!",
 				categoryService.updateCategory(id, categoryDTO, categoryImage));

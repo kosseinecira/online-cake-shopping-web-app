@@ -15,7 +15,7 @@ public class CakeToCakeDtoConverter implements Converter<Cake, CakeDTO> {
 				source.getDiameter(), source.getHeight(), source.getWeight(), source.getNetQuantity(),
 				source.isItAllergen(), source.getIngredients(), source.getDeliveryInformation(),
 				source.getDescription(), source.getNoteDescription(), source.getMessageOnCake(), source.getCakeImages(),
-				source.getFlavor().getName(),source.getCategory().getName());
+				source.getFlavor().getName(), source.getCategory().getName());
 	}
 
 }

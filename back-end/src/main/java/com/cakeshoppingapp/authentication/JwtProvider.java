@@ -1,4 +1,4 @@
-package com.cakeshoppingapp.customer;
+package com.cakeshoppingapp.authentication;
 
 import java.time.Instant;
 import java.util.stream.Collectors;

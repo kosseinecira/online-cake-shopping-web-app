@@ -25,7 +25,7 @@ public class CakeController {
 	public CakeController(CakeService cakeService) {
 		this.cakeService = cakeService;
 	}
-	
+
 	@PostMapping(value = "/categories/{categoryId}/flavors/{flavorId}/cakes", consumes = {
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public Result save(@Valid @RequestParam("cakeDto") CakeMultipleFileDTO cakeMultipleFileDTO,
