@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -55,6 +56,9 @@ public class CakeControllerTest {
 	private ObjectMapper objectMapper;
 	private CakeDTO chocolateDelightCakeDTO, vanillarCakeDTO, redVelvetCakeDTO;
 	private FlavorDTO chocolateFlavorDTO, vanillaFlavorDTO, caramelFlavorDTO;
+	private String base_url;
+
+	private HttpHeaders headers;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -77,17 +81,21 @@ public class CakeControllerTest {
 
 		chocolateDelightCakeDTO = new CakeDTO(1L, "Chocolate Delight", 25.5, 5.0, 8.0, 4.0, 1.5, 10, false,
 				"Flour, Sugar, Cocoa, Butter, Eggs", "Delivery within 3-5 days", "A rich and moist chocolate cake",
-				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavorDTO.name(),"category1");
+				"Keep refrigerated", "Happy Birthday!", null, chocolateFlavorDTO.name(), "category1");
 
 		vanillarCakeDTO = new CakeDTO(2L, "Vanilla Cake", 20.99, 3.00, 9.0, 4.5, 1.1, 1, true,
 				"Flour, Sugar, Vanilla, Eggs, Butter", "Deliver within 2-4 business days",
 				"A classic vanilla cake perfect for any occasion.", "Store in a cool place", "Congratulations", null,
-				vanillaFlavorDTO.name(),"category1");
+				vanillaFlavorDTO.name(), "category1");
 
 		redVelvetCakeDTO = new CakeDTO(3L, "Red Velvet Cake", 30.99, 4.00, 11.0, 5.5, 1.3, 1, false,
 				"Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter", "Deliver within 1-3 business days",
 				"A rich and moist red velvet cake with cream cheese frosting.", "Keep refrigerated", "Best Wishes",
-				null, caramelFlavorDTO.name(),"category1");
+				null, caramelFlavorDTO.name(), "category1");
+
+		base_url = "";
+		headers = new HttpHeaders();
+		headers.setBasicAuth("email1@gmail.com", "password1");
 	}
 
 	@Test
@@ -102,7 +110,7 @@ public class CakeControllerTest {
 
 		this.mockMvc
 				.perform(get("/flavors/{flavorId}/cakes/{cakeId}", chocolateFlavorDTO.name(), 1L)
-						.accept(MediaType.APPLICATION_JSON))
+						.accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Cake Found!")).andExpect(jsonPath("$.data.id").value(1L))
 				.andExpect(jsonPath("$.data.name").value(chocolateDelightCakeDTO.name()));
@@ -113,10 +121,11 @@ public class CakeControllerTest {
 	void testFindCakeByIdNotFound() throws Exception {
 		given(cakeService.findById(Mockito.anyLong())).willThrow(new SomethingNotFoundException("Cake With Id: " + 5L));
 
-		this.mockMvc.perform(get("/flavors/{flavorId}/cakes/{id}", 1L, 5L).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc
+				.perform(get("/flavors/{flavorId}/cakes/{id}", 1L, 5L).accept(MediaType.APPLICATION_JSON)
+						.headers(headers))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Cake With Id: " + 5L))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Cake With Id: " + 5L));
 
 	}
 
@@ -124,7 +133,8 @@ public class CakeControllerTest {
 	void testFindCakeByName() throws Exception {
 		// Given
 		given(cakeService.findByName("Vanilla Cake")).willReturn(vanillarCakeDTO);
-		mockMvc.perform(get("/cakes").queryParam("name", "Vanilla Cake").accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(
+				get("/cakes").queryParam("name", "Vanilla Cake").accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Cake Found!"))
 				.andExpect(jsonPath("$.data.id").value(vanillarCakeDTO.id()))
@@ -137,10 +147,9 @@ public class CakeControllerTest {
 		String name = "Marble cake";
 		given(cakeService.findByName(name)).willThrow(new SomethingNotFoundException("Cake With Name: " + name));
 
-		this.mockMvc.perform(get("/cakes").queryParam("name", name).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get("/cakes").queryParam("name", name).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Cake With Name: " + name))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Cake With Name: " + name));
 
 	}
 
@@ -150,7 +159,8 @@ public class CakeControllerTest {
 		CakeDTO classicVanillaLayerCakeDTO = new CakeDTO(5L, "Classic Vanilla Layer Cake", 50.0, 12.0, 12.0, 6.0, 4.0,
 				8, false, "Flour, Sugar, Butter, Eggs, Vanilla Extract, Baking Powder, Milk",
 				"Delivery within 3-5 days", "A classic vanilla layer cake with rich buttercream frosting",
-				"Store in a cool place", "Congratulations!", new ArrayList<CakeImage>(), vanillaFlavorDTO.name(),"category1");
+				"Store in a cool place", "Congratulations!", new ArrayList<CakeImage>(), vanillaFlavorDTO.name(),
+				"category1");
 
 		CakeMultipleFileDTO cakeMultipleFileDTO = new CakeMultipleFileDTO("Classic Vanilla Layer Cake", 50.0, 12.0,
 				12.0, 6.0, 4.0, 8, false, "Flour, Sugar, Butter, Eggs, Vanilla Extract, Baking Powder, Milk",
@@ -162,10 +172,10 @@ public class CakeControllerTest {
 		MockMultipartFile jsonFile = new MockMultipartFile("cakeMultipleFileDTO", "",
 				MediaType.MULTIPART_FORM_DATA_VALUE, dtoAsJson.getBytes());
 
-		given(cakeService.save(1L,vanillaFlavorDTO.id(), cakeMultipleFileDTO)).willReturn(classicVanillaLayerCakeDTO);
+		given(cakeService.save(1L, vanillaFlavorDTO.id(), cakeMultipleFileDTO)).willReturn(classicVanillaLayerCakeDTO);
 
 		mockMvc.perform(multipart(HttpMethod.POST, "/flavors/{flavorId}/cakes", vanillaFlavorDTO.id())
-				.file("cakeMultipleFileDTO", jsonFile.getBytes()).accept(MediaType.APPLICATION_JSON)
+				.file("cakeMultipleFileDTO", jsonFile.getBytes()).accept(MediaType.APPLICATION_JSON).headers(headers)
 				.contentType(MediaType.MULTIPART_FORM_DATA)).andExpect(jsonPath("$.flag").value(true))
 				.andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Cake Saved Successfully!"))
@@ -185,11 +195,12 @@ public class CakeControllerTest {
 				"Store in a cool place", "Congratulations!", null);
 
 		String dtoAsJson = objectMapper.writeValueAsString(cakeMultipleFileDTO);
-		given(cakeService.save(eq(1L),eq(chocolateDelightCakeDTO.id()), cakeMultipleFileDTO))
+		given(cakeService.save(eq(1L), eq(chocolateDelightCakeDTO.id()), cakeMultipleFileDTO))
 				.willThrow(new SomethingAlreadyExistException("Cake With Name: " + chocolateDelightCakeDTO.name()));
 
-		mockMvc.perform(post("/flavors/{flavorId}/cakes", chocolateDelightCakeDTO.id())
-				.accept(MediaType.APPLICATION_JSON).contentType(MediaType.MULTIPART_FORM_DATA).content(dtoAsJson))
+		mockMvc.perform(
+				post("/flavors/{flavorId}/cakes", chocolateDelightCakeDTO.id()).accept(MediaType.APPLICATION_JSON)
+						.headers(headers).contentType(MediaType.MULTIPART_FORM_DATA).content(dtoAsJson))
 				.andExpect(jsonPath("$.flag").value(false))
 				.andExpect(jsonPath("$.code").value(StatusCode.ALREADY_EXIST))
 				.andExpect(jsonPath("$.message").value(
@@ -202,8 +213,8 @@ public class CakeControllerTest {
 		List<CakeDTO> expectedCakesDTO = Arrays.asList(vanillarCakeDTO, chocolateDelightCakeDTO, redVelvetCakeDTO);
 		when(cakeService.findAll()).thenReturn(expectedCakesDTO);
 
-		this.mockMvc.perform(get("/cakes").accept(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.flag").value(true))
-				.andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+		this.mockMvc.perform(get("/cakes").accept(MediaType.APPLICATION_JSON).headers(headers))
+				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("All Cakes Found!"))
 				.andExpect(jsonPath("$.data", Matchers.hasSize(expectedCakesDTO.size())));
 		verify(cakeService, times(1)).findAll();

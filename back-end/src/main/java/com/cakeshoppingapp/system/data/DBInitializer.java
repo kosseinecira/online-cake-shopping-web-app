@@ -128,15 +128,15 @@ public class DBInitializer implements CommandLineRunner {
 
 	private void setUpCategories() {
 
-		Category chocolateCategory = new Category(1L, "Cake", "Cake.png");
-		Category vanillaCategory = new Category(2L, "CupCake", "CupCake.png");
-		Category caramelCategory = new Category(3L, "Traditional", "traditioanl.png");
+		Category cakeCategory = new Category(1L, "Cake", "Cake.png");
+		Category cupCakeCategory = new Category(2L, "CupCake", "CupCake.png");
+		Category traditionalCategory = new Category(3L, "Traditional", "traditioanl.png");
 		Category juiceCategory = new Category(4L, "Juice", "juice.png");
 		Category iceCreamCategory = new Category(5L, "IceCream", "traditioanl.png");
 
-		categoryRepository.save(chocolateCategory);
-		categoryRepository.save(vanillaCategory);
-		categoryRepository.save(caramelCategory);
+		categoryRepository.save(cakeCategory);
+		categoryRepository.save(cupCakeCategory);
+		categoryRepository.save(traditionalCategory);
 		categoryRepository.save(juiceCategory);
 		categoryRepository.save(iceCreamCategory);
 	}

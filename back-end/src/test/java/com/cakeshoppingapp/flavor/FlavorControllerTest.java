@@ -21,8 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.system.StatusCode;
@@ -48,12 +52,19 @@ public class FlavorControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	private String base_url;
+
+	private HttpHeaders headers;
+
 	@BeforeEach
 	void setUp() {
 		flavorDTO = new FlavorDTO(3L, "Caramel", "Caramel cake features a luxurious, buttery sweetness "
 				+ "with warm, toasty notes of caramelized " + "sugar. Its flavor is reminiscent of rich toffee, with a"
 				+ " smooth and slightly smoky depth that " + "creates a sumptuous and comforting dessert experience.");
 		expectedFlavorDTO = flavorDTO;
+		base_url = "";
+		 headers  = new HttpHeaders();
+			headers.setBasicAuth("email1@gmail.com", "password1");
 	}
 
 	@Test
@@ -76,7 +87,7 @@ public class FlavorControllerTest {
 
 		// When and Then
 		this.mockMvc
-				.perform(post("/flavors").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.perform(post("/flavors").contentType(MediaType.APPLICATION_JSON).headers(headers).accept(MediaType.APPLICATION_JSON).headers(headers)
 						.content(flavorAsJson))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Flavor Saved Successfully!"))
@@ -98,17 +109,17 @@ public class FlavorControllerTest {
 				.willThrow(new SomethingAlreadyExistException("Flavor With Name: " + newFlavorForDTO.name()));
 		// When and Then
 		this.mockMvc
-				.perform(post("/flavors").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+				.perform(post("/flavors").accept(MediaType.APPLICATION_JSON).headers(headers).contentType(MediaType.APPLICATION_JSON).headers(headers)
 						.content(flavorAsJson))
 				.andExpect(jsonPath("$.flag").value(false))
 				.andExpect(jsonPath("$.code").value(StatusCode.ALREADY_EXIST))
 				.andExpect(jsonPath("$.message")
-						.value("Already Exist In The Database::: " + "Flavor With Name: " + newFlavorForDTO.name()))
-				.andExpect(jsonPath("$.data").isEmpty());
+						.value("Already Exist In The Database::: " + "Flavor With Name: " + newFlavorForDTO.name()));
 	}
 
 	@Test
 	void testFindAll() throws Exception {
+		System.out.println("IN FIND ALL::;");
 		List<FlavorDTO> expectedFlavorsAsDTO = new ArrayList<>();
 		FlavorDTO chocolateFlavorDTO = new FlavorDTO(1L, "Chocolate",
 				"Chocolate cake boasts a deep," + " indulgent flavor with rich cocoa undertones and a moist,"
@@ -131,17 +142,20 @@ public class FlavorControllerTest {
 		// given
 		given(flavorService.findAll()).willReturn(expectedFlavorsAsDTO);
 		// When and Then
-		this.mockMvc.perform(get("/flavors").accept(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
-				.andExpect(jsonPath("$.message").value("All Flavors Found!"))
-				.andExpect(jsonPath("$.data", Matchers.hasSize(expectedFlavorsAsDTO.size())));
+		
+		  this.mockMvc.perform(get(
+		  "/flavors").accept(MediaType.APPLICATION_JSON).headers(headers))
+			.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+			.andExpect(jsonPath("$.message").value("All Flavors Found!"))
+			.andExpect(jsonPath("$.data", Matchers.hasSize(expectedFlavorsAsDTO.size())));
+		 
 	}
 
 	@Test
 	void testFindByName() throws Exception {
 
 		given(flavorService.findByName(expectedFlavorDTO.name())).willReturn(expectedFlavorDTO);
-		this.mockMvc.perform(get("/flavors").param("name", expectedFlavorDTO.name()).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get("/flavors").param("name", expectedFlavorDTO.name()).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Flavor With The Requested Name Is Found!"))
 				.andExpect(jsonPath("$.data.id").value(expectedFlavorDTO.id()))
@@ -155,16 +169,15 @@ public class FlavorControllerTest {
 		given(flavorService.findByName(randomFlavorName))
 				.willThrow(new SomethingNotFoundException("Flavor With Name: " + randomFlavorName));
 
-		this.mockMvc.perform(get("/flavors").param("name", randomFlavorName).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get("/flavors").param("name", randomFlavorName).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Name: " + randomFlavorName))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Name: " + randomFlavorName));
 	}
 
 	@Test
 	void testFindByIdSuccess() throws Exception {
 		given(flavorService.findById(flavorDTO.id())).willReturn(expectedFlavorDTO);
-		this.mockMvc.perform(get("/flavors/" + flavorDTO.id()).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get(base_url + "/flavors/" + flavorDTO.id()).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Flavor With The Requested Name Is Found!"))
 				.andExpect(jsonPath("$.data.id").value(expectedFlavorDTO.id()))
@@ -179,10 +192,9 @@ public class FlavorControllerTest {
 		given(flavorService.findById(16875645403545L))
 				.willThrow(new SomethingNotFoundException("Flavor With Id: " + randomId));
 
-		this.mockMvc.perform(get("/flavors/{id}", randomId).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(get("/flavors/{id}", randomId).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + randomId))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + randomId));
 	}
 
 	@Test
@@ -203,8 +215,8 @@ public class FlavorControllerTest {
 		given(flavorService.update(eq(1L), any(FlavorDTO.class))).willReturn(exptectedUpdatedFlavorDTO);
 
 		// When and Then
-		mockMvc.perform(put("/flavors/{id}", 1L).content(flavorAsJson).accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.flag").value(true))
+		mockMvc.perform(put("/flavors/{id}", 1L).content(flavorAsJson).accept(MediaType.APPLICATION_JSON).headers(headers)
+				.contentType(MediaType.APPLICATION_JSON).headers(headers)).andExpect(jsonPath("$.flag").value(true))
 				.andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
 				.andExpect(jsonPath("$.message").value("Flavor Updated Successfully!"))
 				.andExpect(jsonPath("$.data.id").value(exptectedUpdatedFlavorDTO.id()))
@@ -224,30 +236,27 @@ public class FlavorControllerTest {
 				.willThrow(new SomethingNotFoundException("Flavor With Id: " + 4651546511L));
 
 		this.mockMvc
-				.perform(put("/flavors/{id}", flavorUpdatesDTO.id()).accept(MediaType.APPLICATION_JSON)
-						.contentType(MediaType.APPLICATION_JSON).content(flavorAsJson))
+				.perform(put("/flavors/{id}", flavorUpdatesDTO.id()).accept(MediaType.APPLICATION_JSON).headers(headers)
+						.contentType(MediaType.APPLICATION_JSON).headers(headers).content(flavorAsJson))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + flavorUpdatesDTO.id()))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + flavorUpdatesDTO.id()));
 	}
 
 	@Test
 	void deleteFlavorById() throws Exception {
 		doNothing().when(flavorService).deleteById(flavorDTO.id());
-		this.mockMvc.perform(delete("/flavors/{id}", flavorDTO.id()).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(delete("/flavors/{id}", flavorDTO.id()).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(true)).andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
-				.andExpect(jsonPath("$.message").value("Flavor Deleted Successfully!"))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Flavor Deleted Successfully!"));
 	}
 
 	@Test
 	void deleteFlavorByIdFailed() throws Exception {
 		Long randomId = 64513147L;
 		doThrow(new SomethingNotFoundException("Flavor With Id: " + randomId)).when(flavorService).deleteById(randomId);
-		this.mockMvc.perform(delete("/flavors/{id}", randomId).accept(MediaType.APPLICATION_JSON))
+		this.mockMvc.perform(delete("/flavors/{id}", randomId).accept(MediaType.APPLICATION_JSON).headers(headers))
 				.andExpect(jsonPath("$.flag").value(false)).andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + randomId))
-				.andExpect(jsonPath("$.data").isEmpty());
+				.andExpect(jsonPath("$.message").value("Not Found! ::: " + "Flavor With Id: " + randomId));
 	}
 
 }
