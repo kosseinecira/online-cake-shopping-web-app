@@ -18,7 +18,7 @@ import com.cakeshoppingapp.dtoes.AuthenticationDTO;
 import com.cakeshoppingapp.dtoes.CustomerDTO;
 import com.cakeshoppingapp.system.exceptions.SomethingAlreadyExistException;
 import com.cakeshoppingapp.system.exceptions.SomethingNotFoundException;
-import com.cakeshoppingapp.utils.FileUploadUtil;
+import com.cakeshoppingapp.utils.FileManagerUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -107,7 +107,7 @@ public class CustomerService implements UserDetailsService {
 
 	private String handleImageSaving(Long customerId, MultipartFile image) {
 		String imagesPath = "resources\\static\\images\\customers_profile_images\\" + customerId;
-		return FileUploadUtil.saveImageToPath(image, imagesPath)[1];
+		return FileManagerUtil.saveImageToPath(image, imagesPath)[1];
 	}
 
 	private void checkCustomerExistance(String email) {

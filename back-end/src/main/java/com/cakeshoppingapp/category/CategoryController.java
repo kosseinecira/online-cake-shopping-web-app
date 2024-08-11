@@ -1,5 +1,9 @@
 package com.cakeshoppingapp.category;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cakeshoppingapp.dtoes.CategoryDTO;
 import com.cakeshoppingapp.system.Result;
 import com.cakeshoppingapp.system.StatusCode;
+import com.cakeshoppingapp.utils.Constant;
 
 @RestController
 public class CategoryController {
@@ -52,6 +57,14 @@ public class CategoryController {
 			@RequestPart(value = "categoryImage", required = false) MultipartFile categoryImage) {
 		return new Result(true, StatusCode.UPDATED, "Category Added Successfully!",
 				categoryService.updateCategory(id, categoryDTO, categoryImage));
+	}
+
+	@GetMapping(value = "/images/categories_images/{imageName}", produces = { MediaType.IMAGE_JPEG_VALUE,
+			MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE })
+	public byte[] getImages(@PathVariable("imageName") String imageName) throws IOException {
+		String s = System.getProperty("file.separator");
+		return Files.readAllBytes(Paths.get(Constant.IMAGE_PATH + s + "categories_images" + s + imageName));
+
 	}
 
 }

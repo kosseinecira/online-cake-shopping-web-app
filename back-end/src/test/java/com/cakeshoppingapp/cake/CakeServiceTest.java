@@ -33,7 +33,6 @@ import com.cakeshoppingapp.converters.cake.CakeDtoToCakeConverter;
 import com.cakeshoppingapp.converters.cake.CakeToCakeDtoConverter;
 import com.cakeshoppingapp.converters.category.CategoryToCategoryDtoConverter;
 import com.cakeshoppingapp.dtoes.CakeDTO;
-import com.cakeshoppingapp.dtoes.CakeMultipleFileDTO;
 import com.cakeshoppingapp.dtoes.CategoryDTO;
 import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.flavor.Flavor;
@@ -191,6 +190,10 @@ class CakeServiceTest {
 		// the null flavor is because it is irrelevant during request, since we use the
 		// flavor id from the path variable. we will update it later after checking the
 		// flavor exist or not
+		CakeDTO vanillaCheeseCakeDTO = new CakeDTO(5L, "Vanilla Cheesecake", 40.0, 10.0, 10.0, 4.5, 3.0, 6, false,
+				"Cream Cheese, Flour, Sugar, Butter, Eggs, Vanilla Extract", "Delivery within 1-2 days",
+				"A creamy and rich vanilla cheesecake", "Store in a cool place", "Best Wishes!", null,
+				vanillaFlavor.getName(), cakeCategory.getName());
 		Cake vanillaCheeseCake = new Cake(5L, "Vanilla Cheesecake", 40.0, 10.0, 10.0, 4.5, 3.0, 6, false,
 				"Cream Cheese, Flour, Sugar, Butter, Eggs, Vanilla Extract", "Delivery within 1-2 days",
 				"A creamy and rich vanilla cheesecake", "Store in a cool place", "Best Wishes!", null, vanillaFlavor,
@@ -205,14 +208,11 @@ class CakeServiceTest {
 				vanillaFlavor.getDescription());
 		// request DTO
 		List<MultipartFile> multipartFiles = new ArrayList<>();
-		CakeMultipleFileDTO cakeMultipleFileDTO = new CakeMultipleFileDTO("Vanilla Cheesecake", 40.0, 10.0, 10.0, 4.5,
-				3.0, 6, false, "Cream Cheese, Flour, Sugar, Butter, Eggs, Vanilla Extract", "Delivery within 1-2 days",
-				"A creamy and rich vanilla cheesecake", "Store in a cool place", "Best Wishes!", multipartFiles);
 		// ------------------------------------------------------------------------------------------//
 		// given the flavor found.
 		given(flavorService.findById(anyLong())).willReturn(vanillaFlavorDTO);
 		// given cake name doesn't exist.
-		given(cakeRepository.findByName(vanillaCheeseCake.getName())).willReturn(Optional.empty());
+		given(cakeRepository.findByName(vanillaCheeseCakeDTO.name())).willReturn(Optional.empty());
 		//
 		given(categoryService.findById(1L)).willReturn(cakeCategoryDTO);
 		given(cakeDtoToCakeConverter.convert(any(CakeDTO.class))).willReturn(vanillaCheeseCake);
@@ -222,7 +222,7 @@ class CakeServiceTest {
 				.setFlavor(new Flavor(vanillaFlavorDTO.id(), vanillaFlavorDTO.name(), vanillaFlavorDTO.description()));
 		given(cakeRepository.save(any(Cake.class))).willReturn(vanillaCheeseCake);
 
-		CakeDTO returnedCakeDTO = cakeService.save(1L, vanillaCheeseCake.getId(), cakeMultipleFileDTO);
+		CakeDTO returnedCakeDTO = cakeService.save(1L, vanillaCheeseCake.getId(), vanillaCheeseCakeDTO, null);
 
 		assertEquals(expectedVanillaCheeseCakeDTO.id(), returnedCakeDTO.id());
 		assertEquals(expectedVanillaCheeseCakeDTO.name(), returnedCakeDTO.name());
@@ -234,15 +234,18 @@ class CakeServiceTest {
 	@Test
 	void testSaveCakeFailedAlreadyExist() {
 		String cakeNameAlreadyInTheDB = "Red Velvet Cake";
-		CakeMultipleFileDTO cakeMultipleFileDTO = new CakeMultipleFileDTO("Red Velvet Cake", 30.99, 4.00, 11.0, 5.5,
-				1.3, 1, false, "Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter",
-				"Deliver within 1-3 business days", "A rich and moist red velvet cake with cream cheese frosting.",
-				"Keep refrigerated", "Best Wishes", null);
+
+		CakeDTO cakeDto = new CakeDTO(3L, "Red Velvet Cake", 30.99, 4.00, 11.0, 5.5, 1.3, 1, false,
+				"Flour, Sugar, Cocoa, Red food coloring, Eggs, Butter", "Deliver within 1-3 business days",
+				"A rich and moist red velvet cake with cream cheese frosting.", "Keep refrigerated", "Best Wishes",
+				null, caramelFlavor.getName(), traditionalCategory.getName());
+
 		given(cakeRepository.findByName(cakeNameAlreadyInTheDB)).willReturn(Optional.of(redVelvetCake));
 
 		when(categoryService.findById(3L)).thenReturn(traditionalCategoryDTO);
 
-		assertThrows(SomethingAlreadyExistException.class, () -> cakeService.save(3L, 3L, cakeMultipleFileDTO));
+		assertThrows(SomethingAlreadyExistException.class, () -> cakeService.save(3L, 3L, cakeDto, null));
+
 		verify(cakeRepository, times(1)).findByName(cakeNameAlreadyInTheDB);
 	}
 
@@ -306,7 +309,7 @@ class CakeServiceTest {
 		given(cakeRepository.save(any(Cake.class))).willReturn(updatedRedVelvetCake);
 		given(cakeToCakeDtoConverter.convert(updatedRedVelvetCake)).willReturn(updatedRedVelvetCakeDTO);
 		CakeDTO returnedValueCakeDTO = cakeService.update(cakeCategory.getId(), chocolateFlavorDTO.id(),
-				updatedRedVelvetCake.getId(), updatedRedVelvetCakeDTO);
+				updatedRedVelvetCake.getId(), updatedRedVelvetCakeDTO, null);
 
 		assertEquals(returnedValueCakeDTO.id(), updatedRedVelvetCake.getId());
 		assertEquals(returnedValueCakeDTO.name(), updatedRedVelvetCake.getName());
@@ -324,7 +327,7 @@ class CakeServiceTest {
 		Long cakeId = 5L;
 		given(cakeRepository.findById(cakeId)).willThrow(new SomethingNotFoundException("With Id: " + 5L));
 		// DTO is irrelevant in that case.
-		assertThrows(SomethingNotFoundException.class, () -> cakeService.update(1L, flavorId, cakeId, null));
+		assertThrows(SomethingNotFoundException.class, () -> cakeService.update(1L, flavorId, cakeId, null, null));
 		verify(cakeRepository, times(1)).findById(5L);
 	}
 

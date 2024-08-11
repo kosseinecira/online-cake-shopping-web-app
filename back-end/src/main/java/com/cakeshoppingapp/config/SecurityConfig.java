@@ -83,7 +83,8 @@ public class SecurityConfig {
 						// .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1")).permitAll().anyRequest()
 
 						// .requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
-						.anyRequest().authenticated())
+						.requestMatchers(HttpMethod.GET, BASE_URL + "/images/**").permitAll().anyRequest()
+						.authenticated())
 				.headers(header -> header.frameOptions().disable()).csrf(csrf -> csrf.disable())
 				.httpBasic(Customizer.withDefaults()).oauth2ResourceServer(o -> o.jwt())
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,5 +1,6 @@
 package com.cakeshoppingapp.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -8,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,11 +18,11 @@ import com.cakeshoppingapp.system.exceptions.NotSupportedException;
 import jakarta.servlet.ServletContext;
 
 @Component
-public class FileUploadUtil {
+public class FileManagerUtil {
 
 	private static ServletContext servletContext;
 
-	public FileUploadUtil(ServletContext servletContext) {
+	public FileManagerUtil(ServletContext servletContext) {
 
 		this.servletContext = servletContext;
 
@@ -33,7 +35,7 @@ public class FileUploadUtil {
 			throw new NotSupportedException(
 					"File Type: " + StringUtils.getFilenameExtension(fileName) + " Not Supported");
 		try {
-			FileUploadUtil.saveFile(imagesPath, fileName, image);
+			FileManagerUtil.saveFile(imagesPath, fileName.replace(" ", ""), image);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,6 +54,12 @@ public class FileUploadUtil {
 		} catch (IOException ioe) {
 			throw new IOException("Could not save image file: " + fileName, ioe);
 		}
+	}
+
+	public static void deleteFile(String dir) throws IOException {
+		System.out.println("FILE TO BE DELETED :::: " + dir);
+		File file = new File(dir);
+		FileSystemUtils.deleteRecursively(file);
 	}
 
 }

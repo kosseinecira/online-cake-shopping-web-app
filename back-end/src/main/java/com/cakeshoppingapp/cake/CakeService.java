@@ -1,19 +1,18 @@
 package com.cakeshoppingapp.cake;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.cakeshoppingapp.category.Category;
 import com.cakeshoppingapp.category.CategoryService;
 import com.cakeshoppingapp.converters.cake.CakeDtoToCakeConverter;
 import com.cakeshoppingapp.converters.cake.CakeToCakeDtoConverter;
 import com.cakeshoppingapp.dtoes.CakeDTO;
-import com.cakeshoppingapp.dtoes.CakeMultipleFileDTO;
 import com.cakeshoppingapp.dtoes.CategoryDTO;
 import com.cakeshoppingapp.dtoes.FlavorDTO;
 import com.cakeshoppingapp.flavor.Flavor;
@@ -21,7 +20,8 @@ import com.cakeshoppingapp.flavor.FlavorService;
 import com.cakeshoppingapp.image.CakeImage;
 import com.cakeshoppingapp.system.exceptions.SomethingAlreadyExistException;
 import com.cakeshoppingapp.system.exceptions.SomethingNotFoundException;
-import com.cakeshoppingapp.utils.FileUploadUtil;
+import com.cakeshoppingapp.utils.Constant;
+import com.cakeshoppingapp.utils.FileManagerUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -52,27 +52,21 @@ public class CakeService {
 				.orElseThrow(() -> new SomethingNotFoundException("Cake With Id: " + id));
 	}
 
-	public CakeDTO save(Long categoryId, Long flavorId, CakeMultipleFileDTO cakeMultipleFileDTO) {
-
+	public CakeDTO save(Long categoryId, Long flavorId, CakeDTO cakeDto, List<MultipartFile> cakeImages) {
 		FlavorDTO flavorDTO = flavorService.findById(flavorId);
 		CategoryDTO categoryDTO = categoryService.findById(categoryId);
 		// CHECK THE NAME OF THE CAKE IF IT IS ALREADY EXIST
-		handleIfCakeExist(cakeMultipleFileDTO.name());
+		handleIfCakeExist(cakeDto.name());
 		// save images on the server side (resource folder). and return a list of
 		// CakeImagesObject.
 		List<CakeImage> list = null;
-		if (!cakeMultipleFileDTO.cakeImages().isEmpty() && cakeMultipleFileDTO.cakeImages() != null) {
-			list = handleImageSaving(flavorId, cakeMultipleFileDTO.name(), cakeMultipleFileDTO.cakeImages());
-		}
+		if (cakeImages != null)
+			if (!cakeImages.isEmpty()) {
+				list = saveImage(categoryId, cakeDto.name().replace(" ", ""), cakeImages);
+			}
 		// Making a DTO
-		CakeDTO cakeDTO = new CakeDTO(null, cakeMultipleFileDTO.name(), cakeMultipleFileDTO.price(),
-				cakeMultipleFileDTO.discount(), cakeMultipleFileDTO.diameter(), cakeMultipleFileDTO.height(),
-				cakeMultipleFileDTO.weight(), cakeMultipleFileDTO.netQuantity(), cakeMultipleFileDTO.isItAllergen(),
-				cakeMultipleFileDTO.ingredients(), cakeMultipleFileDTO.deliveryInformation(),
-				cakeMultipleFileDTO.description(), cakeMultipleFileDTO.noteDescription(),
-				cakeMultipleFileDTO.messageOnCake(), list, flavorDTO.name(), categoryDTO.name());
-
-		Cake cakeEntity = cakeDtoToCakeConverter.convert(cakeDTO);
+		Cake cakeEntity = cakeDtoToCakeConverter.convert(cakeDto);
+		cakeEntity.setCakeImages(list);
 		// SET THE FLAVOR OF THE CAKE
 		cakeEntity.setFlavor(new Flavor(flavorDTO.id(), flavorDTO.name(), flavorDTO.description()));
 		cakeEntity.setCategory(new Category(categoryDTO.id(), categoryDTO.name()));
@@ -94,12 +88,25 @@ public class CakeService {
 		return cakeRepository.findAll().stream().map(cake -> cakeToCakeDtoConverter.convert(cake)).toList();
 	}
 
-	public CakeDTO update(Long categoryId, Long flavorId, Long cakeId, CakeDTO cakeUpdate) {
+	public CakeDTO update(Long categoryId, Long flavorId, Long cakeId, CakeDTO cakeUpdate,
+			List<MultipartFile> cakeImages) {
 		//
 		FlavorDTO flavorDTO = flavorService.findById(flavorId);
 		CategoryDTO categoryDTO = categoryService.findById(categoryId);
 
 		Cake updatedCake = cakeRepository.findById(cakeId).map(cake -> {
+
+			if (cakeImages != null)
+				if (!cakeImages.isEmpty()) {
+					try {
+						deleteDirectory(cake.getName().replace(" ", ""));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					List<CakeImage> list = saveImage(categoryId, cakeUpdate.name().replace(" ", ""), cakeImages);
+				}
+
 			cake.setName(cakeUpdate.name());
 			cake.setPrice(cakeUpdate.price());
 			cake.setDiscount(cakeUpdate.discount());
@@ -126,22 +133,29 @@ public class CakeService {
 		});
 	}
 
-	public List<CakeDTO> findByFlavorId(Long flavorId) {
-		FlavorDTO flavorDTO = flavorService.findById(flavorId);
-		return cakeRepository.findByFlavorId(flavorId).stream().map(cake -> cakeToCakeDtoConverter.convert(cake))
-				.toList();
+	// Things we need to consider:
+	// in case of cake delete we need to delete all related pictures
+	// in case of cake update we need to delete or replace all older pictures
+
+	private List<CakeImage> saveImage(Long categoryId, String cakeName, List<MultipartFile> cakeImages) {
+		String s = System.getProperty("file.separator");
+		return cakeImages.stream().map(image -> {
+			String imageInfo[] = FileManagerUtil.saveImageToPath(image,
+					Constant.IMAGE_PATH + s + "cakes_images" + s + cakeName);
+			System.out.println("IMAGE NAME :: " + imageInfo[0]);
+			System.out.println("IMAGE PATH :: " + imageInfo[1]);
+			// Note: The Slashes in the path is URL slashes not system slashes!!
+			String result = ServletUriComponentsBuilder.fromCurrentContextPath()
+					.path("/images/cakes_images/" + cakeName + "/" + imageInfo[0]).build().toUriString();
+
+			return new CakeImage(imageInfo[0], result);
+		}).toList();
+
 	}
 
-	private List<CakeImage> handleImageSaving(Long flavorId, String cakeName, List<MultipartFile> imageList) {
-		String imagesPath = "resources\\static\\images\\flavors_images";
-		return imageList.stream().map(image -> {
-			String fileName = UUID.randomUUID().toString() + "_"
-					+ StringUtils.cleanPath(image.getOriginalFilename().strip());
-			String imagePath = imagesPath + flavorId + "\\cakes_images\\" + cakeName.replace(" ", "") + "_images";
-			String[] result = FileUploadUtil.saveImageToPath(image, imagesPath);
-			// result[0] = file name, result[1] = cake image path
-			return new CakeImage(result[0], result[1]);
-		}).toList();
+	private void deleteDirectory(String cakeName) throws IOException {
+		String s = System.getProperty("file.separator");
+		FileManagerUtil.deleteFile(Constant.IMAGE_PATH + s + "cakes_images" + s + cakeName);
 	}
 
 	private void handleIfCakeExist(String name) {
@@ -149,6 +163,26 @@ public class CakeService {
 		if (cakeExist) {
 			throw new SomethingAlreadyExistException("Cake With Name: " + name);
 		}
+	}
+
+	public List<CakeDTO> findByCategoryId(Long categoryId) {
+		CategoryDTO categoryDTO = categoryService.findById(categoryId);
+		return cakeRepository.findByCategoryId(categoryId).stream().map(cake -> cakeToCakeDtoConverter.convert(cake))
+				.toList();
+	}
+
+	public List<CakeDTO> findByFlavorId(Long flavorId) {
+		FlavorDTO flavorDTO = flavorService.findById(flavorId);
+		return cakeRepository.findByFlavorId(flavorId).stream().map(cake -> cakeToCakeDtoConverter.convert(cake))
+				.toList();
+	}
+
+	public List<CakeDTO> findByCategoryIdAndByFlavorId(Long categoryId, Long flavorId) {
+		CategoryDTO categoryDTO = categoryService.findById(categoryId);
+		FlavorDTO flavorDTO = flavorService.findById(flavorId);
+		return cakeRepository.findByCategoryIdAndFlavorId(categoryId, flavorId).stream()
+				.map(cake -> cakeToCakeDtoConverter.convert(cake)).toList();
+
 	}
 
 }

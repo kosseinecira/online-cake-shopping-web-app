@@ -32,12 +32,12 @@ public class FlavorController {
 		this.flavorService = flavorService;
 	}
 
-	@GetMapping(value = { "/flavors", "/flavors/" })
+	@GetMapping(value = { "/flavors" })
 	public Result findAllFlavors() {
 		return new Result(true, StatusCode.SUCCESS, "All Flavors Found!", flavorService.findAll());
 	}
 
-	@PostMapping(value = { "/flavors", "/flavors/" })
+	@PostMapping(value = { "/flavors" })
 	public Result saveFlavor(@Valid @RequestBody FlavorDTO flavor) {
 		return new Result(true, StatusCode.SUCCESS, "Flavor Saved Successfully!", flavorService.save(flavor));
 	}
@@ -48,19 +48,19 @@ public class FlavorController {
 				flavorService.findByName(name));
 	}
 
-	@GetMapping(value = { "/flavors/{id}", "/flavors/{id}/" })
+	@GetMapping(value = { "/flavors/{id}" })
 	public Result findById(@PathVariable("id") Long id) {
 		return new Result(true, StatusCode.SUCCESS, "Flavor With The Requested Name Is Found!",
 				flavorService.findById(id));
 	}
 
-	@PutMapping(value = { "/flavors/{id}", "/flavors/{id}/" })
+	@PutMapping(value = { "/flavors/{id}" })
 	public Result update(@PathVariable("id") Long id, @Valid @RequestBody FlavorDTO flavorDto) {
 		return new Result(true, StatusCode.SUCCESS, "Flavor Updated Successfully!",
 				flavorService.update(id, flavorDto));
 	}
 
-	@DeleteMapping(value = { "/flavors/{id}", "/flavors/{id}/" })
+	@DeleteMapping(value = { "/flavors/{id}" })
 	public Result delete(@PathVariable("id") Long id) {
 		flavorService.deleteById(id);
 		return new Result(true, StatusCode.SUCCESS, "Flavor Deleted Successfully!", null);

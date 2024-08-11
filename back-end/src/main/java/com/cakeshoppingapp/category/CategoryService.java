@@ -12,7 +12,7 @@ import com.cakeshoppingapp.dtoes.CategoryDTO;
 import com.cakeshoppingapp.system.exceptions.SomethingAlreadyExistException;
 import com.cakeshoppingapp.system.exceptions.SomethingNotFoundException;
 import com.cakeshoppingapp.utils.Constant;
-import com.cakeshoppingapp.utils.FileUploadUtil;
+import com.cakeshoppingapp.utils.FileManagerUtil;
 
 @Service
 public class CategoryService {
@@ -78,7 +78,7 @@ public class CategoryService {
 
 	private String saveImage(MultipartFile categoryImage) {
 		String s = System.getProperty("file.separator");
-		String imageInfo[] = FileUploadUtil.saveImageToPath(categoryImage,
+		String imageInfo[] = FileManagerUtil.saveImageToPath(categoryImage,
 				Constant.IMAGE_PATH + s + "categories_images");
 		System.out.println("IMAGE NAME :: " + imageInfo[0]);
 		System.out.println("IMAGE PATH :: " + imageInfo[1]);

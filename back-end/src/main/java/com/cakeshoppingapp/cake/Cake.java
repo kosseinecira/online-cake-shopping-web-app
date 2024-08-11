@@ -57,12 +57,13 @@ public class Cake implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cake_image_id")
 	private List<CakeImage> cakeImages = new ArrayList<>();
-
+	// Many Cakes belongs to one Flavor
 	@ManyToOne()
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "")
 	private Flavor flavor;
 
+	// Many Cakes belongs to one category
 	@ManyToOne()
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "")
