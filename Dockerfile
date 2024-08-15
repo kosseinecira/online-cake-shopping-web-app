@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jre AS builder
 WORKDIR /myapp
-ARG JAR_FILE=back-end/target/*.jar
+ARG JAR_FILE=back-end/target/Online-Cake-Shopping-Webapp-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
