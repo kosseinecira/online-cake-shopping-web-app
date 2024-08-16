@@ -5,7 +5,7 @@ RUN apt install openjdk-17-jdk -y
 RUN apt-get install maven -y
 WORKDIR myapp
 COPY ./back-end .
-WORDIR back-end
+
 RUN mvn clean package -DskipTests
 
 ARG JAR_FILE=target/*.jar
