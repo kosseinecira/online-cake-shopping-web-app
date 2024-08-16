@@ -1,6 +1,9 @@
-FROM eclipse-temurin:17-jre AS builder
+FROM maven:3-eclipse-temurin-17 AS builder
 WORKDIR /myapp
-ARG JAR_FILE=./back-end/target/*.jar
+COPY ./back-end ./
+RUN mvn clean package -DskipTests
+
+ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
