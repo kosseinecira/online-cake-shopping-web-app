@@ -1,14 +1,18 @@
-FROM maven:3-eclipse-temurin-17 AS builder
-WORKDIR /myapp
-COPY ./back-end ./
-RUN mvn clean package -DskipTests
+FROM ubuntu:latest AS builder
 
-ARG JAR_FILE=target/*.jar
+RUN apt-get update
+RUN apt install openjdk-17-jdk -y
+RUN apt-get install maven -y
+WORKDIR myapp
+COPY ./back-end .
+
+RUN mvn clean install 
+ARG JAR_FILE=./back-end/target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
-FROM eclipse-temurin:17-jre
-WORKDIR /myapp
+FROM openjdk:17-jdk-slim
+
 COPY --from=builder myapp/dependencies/ ./
 COPY --from=builder myapp/spring-boot-loader/ ./
 COPY --from=builder myapp/snapshot-dependencies/ ./
@@ -17,3 +21,7 @@ COPY --from=builder myapp/application/ ./
 ENTRYPOINT ["java","org.springframework.boot.loader.launch.JarLauncher"]
 
 EXPOSE 8080
+
+
+
+
