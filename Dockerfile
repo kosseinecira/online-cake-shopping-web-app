@@ -3,11 +3,11 @@ FROM ubuntu:latest AS builder
 RUN apt-get update
 RUN apt install openjdk-17-jdk -y
 RUN apt-get install maven -y
-WORKDIR myapp
 COPY ./back-end .
 
-RUN mvn clean install 
-ARG JAR_FILE=./back-end/target/*.jar
+WORKDIR myapp
+RUN mvn clean package -DskipTests
+ARG JAR_FILE=/myapp/target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
