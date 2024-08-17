@@ -123,7 +123,9 @@
 						<includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
 					</includeOnlyProperties>
 					<commitIdGenerationMode>full</commitIdGenerationMode>
+					<dotGitDirectory>${project.basedir}/../.git</dotGitDirectory>
 				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
