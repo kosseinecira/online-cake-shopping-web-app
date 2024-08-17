@@ -7,6 +7,8 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.Endpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -59,53 +61,68 @@ public class SecurityConfig {
 
 		return http.authorizeHttpRequests(
 				request -> request.requestMatchers(HttpMethod.GET, BASE_URL + "/cakes/**").permitAll()
-				// categories
-//				.requestMatchers(HttpMethod.POST, BASE_URL + "/categories").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.PUT, BASE_URL + "/categories/**").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.DELETE, BASE_URL + "/categories/**").hasAuthority("ROLE_ADMIN")
+						// categories
+						// .requestMatchers(HttpMethod.POST, BASE_URL +
+						// "/categories").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.PUT, BASE_URL +
+						// "/categories/**").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.DELETE, BASE_URL +
+						// "/categories/**").hasAuthority("ROLE_ADMIN")
 						.requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
-//				.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1")).permitAll()
-//				// flavors
-//				.requestMatchers(HttpMethod.POST, BASE_URL + "/flavors/**").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.PUT, BASE_URL + "/flavors/**").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.DELETE, BASE_URL + "/flavors/**").hasAuthority("ROLE_ADMIN")
-//				// /flavors + /flavors/**
+						// .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1")).permitAll()
+						// // flavors
+						// .requestMatchers(HttpMethod.POST, BASE_URL +
+						// "/flavors/**").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.PUT, BASE_URL +
+						// "/flavors/**").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.DELETE, BASE_URL +
+						// "/flavors/**").hasAuthority("ROLE_ADMIN")
+						// // /flavors + /flavors/**
 						.requestMatchers(HttpMethod.GET, BASE_URL + "/flavors/**").permitAll()
-//				// cakes
+						// // cakes
 
-//				// users
-//				.requestMatchers(HttpMethod.GET, BASE_URL + "/users/**").hasAnyAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.POST, BASE_URL + "/users").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.PUT, BASE_URL + "/users/**").hasAuthority("ROLE_ADMIN")
-//				.requestMatchers(HttpMethod.DELETE, BASE_URL + "/users/**").hasAuthority("ROLE_ADMIN")
+						// // users
+						// .requestMatchers(HttpMethod.GET, BASE_URL +
+						// "/users/**").hasAnyAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.POST, BASE_URL +
+						// "/users").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.PUT, BASE_URL +
+						// "/users/**").hasAuthority("ROLE_ADMIN")
+						// .requestMatchers(HttpMethod.DELETE, BASE_URL +
+						// "/users/**").hasAuthority("ROLE_ADMIN")
 
 						// .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll().anyRequest()
 						// .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1")).permitAll().anyRequest()
 
 						// .requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
-						.requestMatchers(HttpMethod.GET, BASE_URL + "/images/**").permitAll().anyRequest()
+						.requestMatchers(HttpMethod.GET, BASE_URL + "/images/**").permitAll()
+						.requestMatchers(EndpointRequest.to("health", "info")).permitAll()
+						.requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health", "info"))
+						.hasAuthority("ROLE_ADMIN")
+						.anyRequest()
 						.authenticated())
 				.headers(header -> header.frameOptions().disable()).csrf(csrf -> csrf.disable())
 				.httpBasic(Customizer.withDefaults()).oauth2ResourceServer(o -> o.jwt())
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.cors(Customizer.withDefaults())
+				.cors(Customizer.withDefaults()).build();
 
-				.build(); // For H2 BROWSER CONSOLE ACCESS
 	}
 
-//	@Bean
-//	CorsConfigurationSource corsConfigurationSource() {
-//		CorsConfiguration configuration = new CorsConfiguration();
-//		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-//		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", configuration);
-//		return source;
-//	}
-//	@Bean
-//	CorsConfiguration corsConfiguration() {
-//		return new CorsConfiguration().applyPermitDefaultValues();
-//	}
+	// @Bean
+	// CorsConfigurationSource corsConfigurationSource() {
+	// CorsConfiguration configuration = new CorsConfiguration();
+	// configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+	// configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT",
+	// "DELETE"));
+	// UrlBasedCorsConfigurationSource source = new
+	// UrlBasedCorsConfigurationSource();
+	// source.registerCorsConfiguration("/**", configuration);
+	// return source;
+	// }
+	// @Bean
+	// CorsConfiguration corsConfiguration() {
+	// return new CorsConfiguration().applyPermitDefaultValues();
+	// }
 
 	@Bean
 	WebMvcConfigurer corsConfigurer() {
@@ -118,17 +135,18 @@ public class SecurityConfig {
 	}
 
 	// Used by Spring Security if CORS is enabled.
-//	@Bean
-//	CorsFilter corsFilter() {
-//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		CorsConfiguration config = new CorsConfiguration();
-//		config.setAllowCredentials(true);
-//		config.addAllowedOrigin("*");
-//		config.addAllowedHeader("*");
-//		config.addAllowedMethod("*");
-//		source.registerCorsConfiguration("/**", config);
-//		return new CorsFilter(source);
-//	}
+	// @Bean
+	// CorsFilter corsFilter() {
+	// UrlBasedCorsConfigurationSource source = new
+	// UrlBasedCorsConfigurationSource();
+	// CorsConfiguration config = new CorsConfiguration();
+	// config.setAllowCredentials(true);
+	// config.addAllowedOrigin("*");
+	// config.addAllowedHeader("*");
+	// config.addAllowedMethod("*");
+	// source.registerCorsConfiguration("/**", config);
+	// return new CorsFilter(source);
+	// }
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
