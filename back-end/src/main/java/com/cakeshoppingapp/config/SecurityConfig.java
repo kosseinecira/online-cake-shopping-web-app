@@ -96,8 +96,8 @@ public class SecurityConfig {
 
 						// .requestMatchers(HttpMethod.GET, BASE_URL + "/categories/**").permitAll()
 						.requestMatchers(HttpMethod.GET, BASE_URL + "/images/**").permitAll()
-						.requestMatchers(EndpointRequest.to("health", "info")).permitAll()
-						.requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health", "info"))
+						.requestMatchers(EndpointRequest.to("health", "info", "prometheus")).permitAll()
+						.requestMatchers(EndpointRequest.toAnyEndpoint().excluding("health", "info", "prometheus"))
 						.hasAuthority("ROLE_ADMIN")
 						.anyRequest()
 						.authenticated())

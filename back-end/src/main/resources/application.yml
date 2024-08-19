@@ -54,7 +54,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,env,beans,configprops,heapdump,httpexchanges,loggers
+        include: health,info,metrics,env,beans,configprops,heapdump,httpexchanges,loggers,prometheus
 
   endpoint:
     health:
@@ -73,6 +73,9 @@ management:
       enabled: true
     os:
       enabled: true
+  tracing: #for zipkin
+    sampling:
+      probability: 1 #only for demo perpose , change it to 0.1 in production
 #    configprops:
 #      show-values: always
 
